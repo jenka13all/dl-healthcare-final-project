@@ -8,7 +8,7 @@ for ICD9 diagnoses and items
 '''
 
 #put your path to mimic3 data D_ITEMS.csv (chartevents) and D_ICD_DIAGNOSES.csv
-data_path = '../../../../Documents/coursera/dl-for-healthcare-project/mimic-iii-clinical-database-1.4/'
+data_path = 'mimic-iii-clinical-database-1.4/'
 
 d_diagnoses = pd.read_csv(data_path+'D_ICD_DIAGNOSES.csv', usecols=['ICD9_CODE'], dtype=str)
 vocab_diagnoses = pd.DataFrame(
