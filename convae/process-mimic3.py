@@ -33,7 +33,7 @@ def create_vocab(data_path):
         dtype=pd.StringDtype()
     )
 
-    vocab = pd.concat([vocab_diagnoses, vocab_items])
+    vocab = pd.concat([vocab_diagnoses, vocab_items], ignore_index=True)
 
     # group the vitals into pre-specified 17 categories from Benchmark
     # read grouped vitals yaml
@@ -51,7 +51,10 @@ def create_vocab(data_path):
         vocab.loc[vocab_to_update, 'LABEL'] = new_label
         vocab.loc[vocab_to_update, 'DESC'] = '"' + key + '"'
 
-    vocab.to_csv('data/cohort-vocab.csv', index=False, quoting=csv.QUOTE_NONE, escapechar='\\')
+    vocab.to_csv('data/cohort-vocab.csv',
+                 quoting=csv.QUOTE_NONE,
+                 escapechar='\\',
+                 index_label='INDEX')
 
 
 def map_vitals():
@@ -95,5 +98,6 @@ def map_vitals():
 
 # put your path to mimic3 data D_ITEMS.csv (chartevents) and D_ICD_DIAGNOSES.csv
 database_path = 'mimic-iii-clinical-database-1.4/'
+database_path = '../../../coursera/dl-for-healthcare-project/mimic-iii-clinical-database-1.4/'
 map_vitals()
 create_vocab(database_path)
