@@ -70,7 +70,33 @@ def map_vitals():
         documents = yaml.dump(vitals_items_dict, file)
 
 
+def group_vitals():
+    """
+    groups chartevent codes for the 17 Benchmark vital signs within the vocabulary
+    creates a new, grouped vocabulary file
+    :return: None
+    """
+    # read cohort-vocab
+    vocab = pd.read_csv('data/cohort-vocab.csv')
+
+    # read vital yaml
+    with open('data/vitals-map.yaml') as f:
+        vitals_map = yaml.load(f, Loader=yaml.FullLoader)
+
+    for key, values_dict in vitals_map.items():
+        item_ids = values_dict['item_ids']
+        item_ids = [str(x) for x in item_ids]
+        new_label = values_dict['vocab_label']
+
+        # we only want to update labels for chart events (vitals), NOT diagnoses
+        vocab_to_update = vocab.CODE.isin(item_ids) & vocab.LABEL.str.match('chartevents_')
+        vocab.loc[vocab_to_update, 'LABEL'] = new_label
+
+    # write to an updated vocab file
+    vocab.to_csv('data/cohort-vocab-grouped.csv', index=False)
+
 # put your path to mimic3 data D_ITEMS.csv (chartevents) and D_ICD_DIAGNOSES.csv
 #database_path = 'mimic-iii-clinical-database-1.4/'
 #create_vocab(database_path)
 #map_vitals()
+#group_vitals()
