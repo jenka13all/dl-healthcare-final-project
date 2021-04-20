@@ -37,7 +37,7 @@ def create_vocab(data_path):
 
     # group the vitals into pre-specified 17 categories from Benchmark
     # read grouped vitals yaml
-    with open('data/vitals-map.yaml') as f:
+    with open('resources/vitals-map.yaml') as f:
         vitals_map = yaml.load(f, Loader=yaml.FullLoader)
 
     # update label for each grouped vital, add meaningful description
@@ -63,7 +63,7 @@ def map_vitals():
     writes results as a yaml file data/vitals-map.yaml
     :return: None
     """
-    vitals = pd.read_csv('data/vitals-map.csv', quotechar='"')
+    vitals = pd.read_csv('resources/vitals-map.csv', quotechar='"')
     item_id_to_variables = pd.read_csv('resources/itemid_to_variable_map.csv')
 
     vitals_items_dict = {}
@@ -92,12 +92,12 @@ def map_vitals():
 
         i += 1
 
-    with open('data/vitals-map.yaml', 'w') as file:
+    with open('resources/vitals-map.yaml', 'w') as file:
         documents = yaml.dump(vitals_items_dict, file)
 
 
 # put your path to mimic3 data D_ITEMS.csv (chartevents) and D_ICD_DIAGNOSES.csv
-database_path = 'mimic-iii-clinical-database-1.4/'
+# database_path = 'mimic-iii-clinical-database-1.4/'
 database_path = '../../../coursera/dl-for-healthcare-project/mimic-iii-clinical-database-1.4/'
 map_vitals()
 create_vocab(database_path)
