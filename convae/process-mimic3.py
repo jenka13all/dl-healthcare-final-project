@@ -6,10 +6,12 @@ import csv
 def create_vocab(data_path):
     """
     creates a CSV file, data/cohort-vocab.csv, from mimic3 D_ICD_DIAGNOSES.csv and D_ITEMS.csv
-    COLUMNS: LABEL, CODE
+    COLUMNS: LABEL, CODE, DESC
     :param data_path: string
     :return: None
     """
+
+    # populate diagnoses
     d_diagnoses = pd.read_csv(data_path+'D_ICD_DIAGNOSES.csv', usecols=['ICD9_CODE', 'LONG_TITLE'], dtype=str)
     vocab_diagnoses = pd.DataFrame(
         data={
@@ -20,6 +22,7 @@ def create_vocab(data_path):
         dtype=pd.StringDtype()
     )
 
+    # populate items
     d_items = pd.read_csv(data_path+'D_ITEMS.csv', usecols=['LINKSTO', 'ITEMID', 'LABEL'], dtype=str)
     vocab_items = pd.DataFrame(
         data={
