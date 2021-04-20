@@ -1,5 +1,6 @@
 import pandas as pd
 import yaml
+import csv
 
 
 def create_vocab(data_path):
@@ -9,26 +10,45 @@ def create_vocab(data_path):
     :param data_path: string
     :return: None
     """
-    d_diagnoses = pd.read_csv(data_path+'D_ICD_DIAGNOSES.csv', usecols=['ICD9_CODE'], dtype=str)
+    d_diagnoses = pd.read_csv(data_path+'D_ICD_DIAGNOSES.csv', usecols=['ICD9_CODE', 'LONG_TITLE'], dtype=str)
     vocab_diagnoses = pd.DataFrame(
         data={
             'LABEL': 'DIAGNOSIS_' + d_diagnoses['ICD9_CODE'].astype(str),
-            'CODE': d_diagnoses['ICD9_CODE'].astype(str)
+            'CODE': d_diagnoses['ICD9_CODE'].astype(str),
+            'DESC': '"' + d_diagnoses['LONG_TITLE'].str.replace('"', '') + '"'
         },
         dtype=pd.StringDtype()
     )
 
-    d_items = pd.read_csv(data_path+'D_ITEMS.csv', usecols=['LINKSTO', 'ITEMID'], dtype=str)
+    d_items = pd.read_csv(data_path+'D_ITEMS.csv', usecols=['LINKSTO', 'ITEMID', 'LABEL'], dtype=str)
     vocab_items = pd.DataFrame(
         data={
             'LABEL': d_items['LINKSTO'].astype(str) + '_' + d_items['ITEMID'].astype(str),
-            'CODE': d_items['ITEMID'].astype(str)
+            'CODE': d_items['ITEMID'].astype(str),
+            'DESC': '"' + d_items['LABEL'].str.replace('"', '') + '"'
         },
         dtype=pd.StringDtype()
     )
 
     vocab = pd.concat([vocab_diagnoses, vocab_items])
-    vocab.to_csv('data/cohort-vocab.csv', index=False)
+
+    # group the vitals into pre-specified 17 categories from Benchmark
+    # read grouped vitals yaml
+    with open('data/vitals-map.yaml') as f:
+        vitals_map = yaml.load(f, Loader=yaml.FullLoader)
+
+    # update label for each grouped vital, add meaningful description
+    for key, values_dict in vitals_map.items():
+        item_ids = values_dict['item_ids']
+        item_ids = [str(x) for x in item_ids]
+        new_label = values_dict['vocab_label']
+
+        # make a grouped label for the 17 chartevents
+        vocab_to_update = vocab.CODE.isin(item_ids) & vocab.LABEL.str.match('chartevents_')
+        vocab.loc[vocab_to_update, 'LABEL'] = new_label
+        vocab.loc[vocab_to_update, 'DESC'] = '"' + key + '"'
+
+    vocab.to_csv('data/cohort-vocab.csv', index=False, quoting=csv.QUOTE_NONE, escapechar='\\')
 
 
 def map_vitals():
@@ -70,33 +90,7 @@ def map_vitals():
         documents = yaml.dump(vitals_items_dict, file)
 
 
-def group_vitals():
-    """
-    groups chartevent codes for the 17 Benchmark vital signs within the vocabulary
-    creates a new, grouped vocabulary file
-    :return: None
-    """
-    # read cohort-vocab
-    vocab = pd.read_csv('data/cohort-vocab.csv')
-
-    # read vital yaml
-    with open('data/vitals-map.yaml') as f:
-        vitals_map = yaml.load(f, Loader=yaml.FullLoader)
-
-    for key, values_dict in vitals_map.items():
-        item_ids = values_dict['item_ids']
-        item_ids = [str(x) for x in item_ids]
-        new_label = values_dict['vocab_label']
-
-        # we only want to update labels for chart events (vitals), NOT diagnoses
-        vocab_to_update = vocab.CODE.isin(item_ids) & vocab.LABEL.str.match('chartevents_')
-        vocab.loc[vocab_to_update, 'LABEL'] = new_label
-
-    # write to an updated vocab file
-    vocab.to_csv('data/cohort-vocab-grouped.csv', index=False)
-
 # put your path to mimic3 data D_ITEMS.csv (chartevents) and D_ICD_DIAGNOSES.csv
-#database_path = 'mimic-iii-clinical-database-1.4/'
-#create_vocab(database_path)
-#map_vitals()
-#group_vitals()
+database_path = 'mimic-iii-clinical-database-1.4/'
+map_vitals()
+create_vocab(database_path)
