@@ -1,0 +1,208 @@
+Capillary refill rate:
+  event_table: chartevents
+  impute_value: '0.0'
+  item_ids:
+  - 3348
+  - 115
+  - 8377
+  modeled_as: categorical
+Diastolic blood pressure:
+  event_table: chartevents
+  impute_value: '59.0'
+  item_ids:
+  - 8368
+  - 220051
+  - 225310
+  - 8555
+  - 8441
+  - 220180
+  - 8502
+  - 8440
+  - 8503
+  - 8504
+  - 8507
+  - 8506
+  - 224643
+  modeled_as: continuous
+Fraction inspired oxygen:
+  event_table: chartevents
+  impute_value: '0.21'
+  item_ids:
+  - 3420
+  - 223835
+  - 3422
+  - 189
+  - 727
+  modeled_as: continuous
+Glascow coma scale eye opening:
+  event_table: chartevents
+  impute_value: 4 spontaneously
+  item_ids:
+  - 184
+  - 220739
+  modeled_as: categorical
+Glascow coma scale motor response:
+  event_table: chartevents
+  impute_value: 6 obeys commands
+  item_ids:
+  - 454
+  - 223901
+  modeled_as: categorical
+Glascow coma scale total:
+  event_table: chartevents
+  impute_value: '15'
+  item_ids:
+  - 198
+  modeled_as: categorical
+Glascow coma scale verbal response:
+  event_table: chartevents
+  impute_value: 5 oriented
+  item_ids:
+  - 723
+  - 223900
+  modeled_as: categorical
+Glucose:
+  event_table: chartevents, labevents
+  impute_value: '128.0'
+  item_ids:
+  - 50931
+  - 807
+  - 811
+  - 1529
+  - 50809
+  - 51478
+  - 3745
+  - 225664
+  - 220621
+  - 226537
+  modeled_as: continuous
+Heart Rate:
+  event_table: chartevents
+  impute_value: '86'
+  item_ids:
+  - 211
+  - 220045
+  modeled_as: continuous
+Height:
+  event_table: chartevents
+  impute_value: '170.0'
+  item_ids:
+  - 226707
+  - 226730
+  - 1394
+  modeled_as: continuous
+Mean blood pressure:
+  event_table: chartevents
+  impute_value: '77.0'
+  item_ids:
+  - 52
+  - 220052
+  - 225312
+  - 224
+  - 6702
+  - 224322
+  - 456
+  - 220181
+  - 3312
+  - 3314
+  - 3316
+  - 3322
+  - 3320
+  modeled_as: continuous
+Oxygen saturation:
+  event_table: chartevents, labevents
+  impute_value: '98.0'
+  item_ids:
+  - 834
+  - 50817
+  - 8498
+  - 220227
+  - 646
+  - 220277
+  modeled_as: continuous
+Respiratory rate:
+  event_table: chartevents
+  impute_value: '19'
+  item_ids:
+  - 618
+  - 220210
+  - 3603
+  - 224689
+  - 614
+  - 651
+  - 224422
+  - 615
+  - 224690
+  modeled_as: continuous
+Systolic blood pressure:
+  event_table: chartevents
+  impute_value: '118.0'
+  item_ids:
+  - 51
+  - 220050
+  - 225309
+  - 6701
+  - 455
+  - 220179
+  - 3313
+  - 3315
+  - 442
+  - 3317
+  - 3323
+  - 3321
+  - 224167
+  - 227243
+  modeled_as: continuous
+Temperature:
+  event_table: chartevents
+  impute_value: '36.6'
+  item_ids:
+  - 3655
+  - 677
+  - 676
+  - 223762
+  - 3654
+  - 678
+  - 223761
+  - 679
+  modeled_as: continuous
+Weight:
+  event_table: chartevents
+  impute_value: '81.0'
+  item_ids:
+  - 763
+  - 224639
+  - 226512
+  - 3580
+  - 3693
+  - 3581
+  - 226531
+  - 3582
+  - 581
+  - 3723
+  - 3583
+  - 3692
+  - 580
+  - 733
+  - 225124
+  - 4183
+  - 226846
+  modeled_as: continuous
+pH:
+  event_table: chartevents, labevents
+  impute_value: '7.4'
+  item_ids:
+  - 50820
+  - 51491
+  - 3839
+  - 1673
+  - 50831
+  - 51094
+  - 780
+  - 1126
+  - 223830
+  - 4753
+  - 4202
+  - 860
+  - 220274
+  modeled_as: continuous
