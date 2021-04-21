@@ -14,7 +14,7 @@ mimic3_pat_path = os.path.join(args.mimic3_pat_path, cohort_type)
 if cohort_type == 'train':
     cohort_path = 'data/cohort-ehrseq.csv'
 else:
-    cohort_path = 'data/cohort_text-ehrseq.csv'
+    cohort_path = 'data/cohort_test-ehrseq.csv'
 
 # make vocab a df
 vocab_path = 'data/cohort-vocab.csv'
