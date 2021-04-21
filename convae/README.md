@@ -16,7 +16,7 @@ learned model are not valuable for reproducing the study or using the architectu
 The ConvAE repository also does not provide guidance for formatting real EHR data: this information has to
 be gleaned from careful reading of the study, examination of the code, and comparison to the sample data.
 
-In my repository, I attempt to provide this guidance. By following the steps, you should have formatted
+In my repository, I attempt to provide this guidance. By following the steps, you should end up with formatted
 MIMIC-3 data that can be used for clustering (as in the ConvAE study) or in other downstream prediction tasks. 
 I have focused on the phenotype prediction task described in the Benchmarks study. [2]
 
