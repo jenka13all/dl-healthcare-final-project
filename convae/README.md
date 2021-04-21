@@ -27,7 +27,7 @@ Python 3.6+
 
 ```
 
-# Run ConvAE
+# Getting started
 Clone the repository and switch to the `convae` folder:
 
 ```bash
