@@ -52,6 +52,15 @@ To prepare the data:
    
        python process-mimic3.py {PATH TO MIMIC-III CSVs}
 
+2. The following steps create a sequence file for patients of their diagnoses (only). Future code will integrate vital signs 
+   and demographics. The PATH parameter is for the MIMIC-III root patient data and should be something like 
+   "mimic3-benchmarks/data/root". Use the COHORT_TYPE parameter "train" for the training cohort, and "test" for the
+   testing cohort.
+
+       python3 create_diagnosis_seq.py {PATH TO MIMIC-III root patient data} train
+
+       python3 create_diagnosis_seq.py {PATH TO MIMIC-III root patient data} test
+
 
 ## References
 
