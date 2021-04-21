@@ -28,7 +28,7 @@ Python 3.6+
 ```
 
 # Run ConvAE
-Download the `convae` folder
+Clone the repository and switch to the `convae` folder:
 
 ```bash
 $ git clone https://github.com/jenka13all/dl-healthcare-final-project.git
