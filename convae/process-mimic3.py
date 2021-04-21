@@ -1,6 +1,11 @@
 import pandas as pd
 import yaml
 import csv
+import argparse
+
+parser = argparse.ArgumentParser(description='Create cohort vocabulary from MIMIC-III CSV diagnosis and item files.')
+parser.add_argument('mimic3_path', type=str, help='Directory containing MIMIC-III CSV files.')
+args, _ = parser.parse_known_args()
 
 
 def create_vocab(data_path):
@@ -96,8 +101,6 @@ def map_vitals():
         documents = yaml.dump(vitals_items_dict, file)
 
 
-# put your path to mimic3 data D_ITEMS.csv (chartevents) and D_ICD_DIAGNOSES.csv
-# database_path = 'mimic-iii-clinical-database-1.4/'
-database_path = '../../../coursera/dl-for-healthcare-project/mimic-iii-clinical-database-1.4/'
+database_path = args.mimic3_path
 map_vitals()
 create_vocab(database_path)
