@@ -31,12 +31,12 @@ Python 3.6+
 Download the `convae` folder
 
 ```bash
-$ git clone ...
+$ git clone https://github.com/jenka13all/dl-healthcare-final-project.git
 
 $ cd convae
 ```
 
-The full list of required Python Packages is available in `requrirements.txt` file. It is possible
+The full list of required Python Packages is available in `convae/requirements.txt`. It is possible
 to install all the dependencies by:
 
 ```bash
