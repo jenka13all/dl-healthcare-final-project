@@ -26,8 +26,8 @@ This code contained errors that I corrected. For example, it used the wrong obje
 loss of the embedding (code) representations. Also, the original implementation of the code cost function did not work
 at all (it returned multiple errors). Finally, there was no handling of the problem of cold-start on calculating the 
 average cost of learning the representations. I'm providing the necessary files (Med2Vec.py, Med2VecRunner.py, 
-PredictModel.py, and the preprocessed sequence data files) here in my repository with all the corrections. 
-They can be used on the provided data sequences  as is, to create and train models and then use these models to predict
+PredictModel.py, and the preprocessed sequence data files) with all my corrections in 
+the "tensorflow-implementation" directory. They can be used on the provided data sequences  as is, to create and train models and then use these models to predict
 the codes of a future visit for a patient based on previous visits.
 
 Additionally, I provide code calculating the statistics of the patient visit data. This is available in the "analyses"
