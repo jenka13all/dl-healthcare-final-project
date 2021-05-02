@@ -32,7 +32,7 @@ Finally, it was very confusing, so I rewrote it.
 
 I'm providing the necessary files (Med2Vec.py, Med2VecRunner.py, PredictModel.py, and the preprocessed sequence data files) 
 with all my corrections in the "tensorflow-implementation" directory. They can be used by providing a path to
-the data sequences meant to be used for training:
+the training data sequences.
 
 ```
 python3 Med2VecRunner.py --seq_file=./Med2Vec_data/train_seqs.pkl --label_file=./Med2Vec_data/train_labels.pkl --model_path=./Med2Vec_model/your_path_here
