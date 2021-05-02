@@ -36,10 +36,10 @@ train_end_index = splittable_indexes[6028]
 training_seq = x_seq[0:train_end_index]
 testing_seq = x_seq[train_end_index+1:]
 
-with open('Med2Vec_data/train_seqs.pk', 'wb') as f1:
+with open('Med2Vec_data/train_seqs.pkl', 'wb') as f1:
     pickle.dump(training_seq, f1)
 
-with open('Med2Vec_data/test_seqs.pk', 'wb') as f1:
+with open('Med2Vec_data/test_seqs.pkl', 'wb') as f1:
     pickle.dump(testing_seq, f1)
 
 label_indexes = []
