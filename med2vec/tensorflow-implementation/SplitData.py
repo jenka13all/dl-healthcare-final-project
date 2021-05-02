@@ -53,8 +53,8 @@ train_end_index = label_indexes[6028]
 training_labels = y_seq[0:train_end_index]
 testing_labels = y_seq[train_end_index+1:]
 
-with open('Med2Vec_data/train_labels.pk', 'wb') as f1:
+with open('Med2Vec_data/train_labels.pkl', 'wb') as f1:
     pickle.dump(training_labels, f1)
 
-with open('Med2Vec_data/test_labels.pk', 'wb') as f1:
+with open('Med2Vec_data/test_labels.pkl', 'wb') as f1:
     pickle.dump(testing_labels, f1)
