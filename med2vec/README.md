@@ -31,8 +31,9 @@ the "tensorflow-implementation" directory. They can be used on the provided data
 the codes of a future visit for a patient based on previous visits.
 
 Additionally, I provide code calculating the statistics of the patient visit data. This is available in the "analyses"
-folder as "get_patient_stats.py". This is useful for later comparison to a similar diagnosis prediction task 
-made in the MIMIC-3 benchmark study [2].
+folder as "get_patient_stats.py". Also in the "analyses" folder is a script for mapping Med2Vec diagnosis codes to
+MIMIC-III Benchmark codes. This is useful for comparison to the phenotype prediction task made in the MIMIC-3 
+Benchmark study [2].
 
 ## References
 
