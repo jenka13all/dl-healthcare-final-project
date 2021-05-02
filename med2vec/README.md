@@ -22,18 +22,29 @@ I double-checked the total numbers of patients, visits, and diagnoses to make su
 and training the model, evaluation and prediction I used code from a TensorFlow implementation of Med2Vec
 available at [this repository](https://github.com/sdwww/Med2Vec_tensorflow/blob/master/Med2VecRunner.py).
 
-This code contained errors that I corrected. For example, it used the wrong objective function for calculating the
-loss of the embedding (code) representations. Also, the original implementation of the code cost function did not work
-at all (it returned multiple errors). Finally, there was no handling of the problem of cold-start on calculating the 
-average cost of learning the representations. I'm providing the necessary files (Med2Vec.py, Med2VecRunner.py, 
-PredictModel.py, and the preprocessed sequence data files) with all my corrections in 
-the "tensorflow-implementation" directory. They can be used on the provided data sequences  as is, to create and train models and then use these models to predict
-the codes of a future visit for a patient based on previous visits.
+This code contained some serious errors that I had to correct. For example, it called the wrong objective function 
+for calculating the loss of the embedding (code) representations. The original implementation of the code 
+cost function did not work at all (it returned multiple errors). There was an oversight in the code dealing with 
+the patient separator ([-1]) when calculating the average cost of learning the representations. The function 
+for predicting a visit based on one preceding visit contained a serious mistake: namely, it was using codes of 
+the visit _previous_ to the input visit as the target, instead of the codes of the _following_ visit. 
+Finally, it was very confusing, so I rewrote it.
 
-Additionally, I provide code calculating the statistics of the patient visit data. This is available in the "analyses"
-folder as "get_patient_stats.py". Also in the "analyses" folder is a script for mapping Med2Vec diagnosis codes to
-MIMIC-III Benchmark codes. This is useful for comparison to the phenotype prediction task made in the MIMIC-3 
-Benchmark study [2].
+I'm providing the necessary files (Med2Vec.py, Med2VecRunner.py, PredictModel.py, and the preprocessed sequence data files) 
+with all my corrections in the "tensorflow-implementation" directory. They can be used by providing a path to
+the data sequences meant to be used for training:
+
+```
+python3 Med2VecRunner.py --seq_file=./Med2Vec_data/train_seqs.pkl --label_file=./Med2Vec_data/train_labels.pkl --model_path=./Med2Vec_model/your_path_here
+```
+
+Other parameters, such as number of samples, unique number of codes in the seq.pkl file, unique number of codes
+in the label.pkl file, number of windows to predict on, number of epochs, batch size, etc., need to be updated
+in the "config" dictionary in the "get_config" function in Med2VecRunner.
+
+I'm also providing code for calculating the statistics of the patient, visit, and codes data, as well as a
+script for mapping Med2Vec diagnosis codes to MIMIC-III Benchmark codes. This is useful for making comparisons 
+to the phenotype prediction task from the MIMIC-III Benchmark study [2].
 
 ## References
 
