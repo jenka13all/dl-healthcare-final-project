@@ -2,3 +2,4 @@
 .python-version
 convae/convae_steps.txt
 convae/encodings/
+med2vec/.python-version
