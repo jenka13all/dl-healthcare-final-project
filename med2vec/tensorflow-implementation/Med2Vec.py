@@ -55,7 +55,8 @@ class Med2Vec(object):
         # CORRECTION
         # minimize error of code cost
         # this captures the co-occurrence information of codes within visits
-        # final cost with this (on train/test split):  85,020
+        # final cost with this (on train/test split with 3-digit ICD9 codes):  85,020
+        # final cost with this (on train/test split on COMPLETE ICD9 codes): 96,819
         self.emb_cost = self._initialize_emb_cost()
 
         # combine visit and embedding (code) obj. functions to learn both visit and code representations
