@@ -3,3 +3,4 @@
 convae/convae_steps.txt
 convae/encodings/
 med2vec/.python-version
+benchmarks/.python-version
