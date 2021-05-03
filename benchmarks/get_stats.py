@@ -7,14 +7,14 @@ maps the "task number" in the results JSON to care condition name
 formats the results JSON into tabular format and saves as csv file
 '''
 
-data_path = '../data/phenotyping/'
-resources_path = '../mimic3benchmark/resources/'
+data_path = 'data/phenotyping/'
+resources_path = 'resources/'
 
 with open(resources_path + 'hcup_ccs_2015_definitions_benchmark.yaml', 'r') as f:
     definitions = yaml.load(f, Loader=yaml.FullLoader)
 
 # map "task number" (e.g. "1", "2") to correct conditions
-labels_file = '../data/root/phenotype_labels.csv'
+labels_file = 'data/root/phenotype_labels.csv'
 labels = pd.read_csv(labels_file)
 labels = list(labels.head(1))
 
