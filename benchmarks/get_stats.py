@@ -24,7 +24,7 @@ for i in range(1, len(labels)+1):
     phenotype_labels[i] = labels[i-1]
 
 '''
-with open('resources/task_nr_to_phenotype_label.dict', 'wb') as f1:
+with open(resources_path + 'task_nr_to_phenotype_label.dict', 'wb') as f1:
     pickle.dump(phenotype_labels, f1)
 '''
 
