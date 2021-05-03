@@ -1,6 +1,7 @@
 import pandas as pd
 import yaml
 import json
+import pickle
 
 '''
 maps the "task number" in the results JSON to care condition name
@@ -21,6 +22,11 @@ labels = list(labels.head(1))
 phenotype_labels = {}
 for i in range(1, len(labels)+1):
     phenotype_labels[i] = labels[i-1]
+
+'''
+with open('resources/task_nr_to_phenotype_label.dict', 'wb') as f1:
+    pickle.dump(phenotype_labels, f1)
+'''
 
 # open pheno_results.json
 results_json = data_path + 'evaluation/pheno_results.json'
@@ -59,8 +65,4 @@ for rx, metrics in final_results_dict.items():
     i += 1
 
 # save final dataframe to CSV
-metrics_df.to_csv(data_path+'evaluation/results_table.csv', float_format='%.3f')
-
-
-
-
+#metrics_df.to_csv(data_path+'evaluation/results_table.csv', float_format='%.3f')
