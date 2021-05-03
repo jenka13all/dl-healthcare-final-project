@@ -8,14 +8,17 @@ import argparse
 
 
 def load_data(x_file, d_file, y_file):
+    x_file = './Med2Vec_data/' + x_file
     x_seq = np.array(pickle.load(open(x_file, 'rb')), dtype='object')
 
     d_seq = []
     if len(d_file) > 0:
+        d_file = './Med2Vec_data/' + d_file
         d_seq = np.array(pickle.load(open(d_file, 'rb')), dtype='object')
 
     y_seq = []
     if len(y_file) > 0:
+        y_file = './Med2Vec_data/' + y_file
         y_seq = np.array(pickle.load(open(y_file, 'rb')), dtype='object')
 
     return x_seq, d_seq, y_seq
@@ -122,6 +125,9 @@ def model_train(med2vec, saver, config):
                 x, y, mask, i_vec, j_vec = pad_matrix(x_batch, y_batch, config)
                 cost = med2vec.partial_fit(x=x, y=y, mask=mask, i_vec=i_vec, j_vec=j_vec)
             else:
+                if len(x_batch[0]) == 1 and sum(x_batch[0]) == -1:
+                    print('separator: skipped')
+                    continue
                 x, mask, i_vec, j_vec = pad_matrix(x_batch, y_batch, config)
                 cost = med2vec.partial_fit(x=x, mask=mask, i_vec=i_vec, j_vec=j_vec)
             # Compute average loss
@@ -259,9 +265,13 @@ def predict_next_visit(med2vec, saver, config, top_n=5):
         saver.restore(med2vec.sess, ckpt.model_checkpoint_path)
 
     # open TESTING data
-    test_seq_file = './Med2Vec_data/test_seqs.pkl'
+    test_seq_file = 'test_seqs.pkl'
     test_demo_file = ''
-    test_label_file = './Med2Vec_data/test_labels.pkl'
+    # for 3-digit ICD9 codes
+    #test_label_file = 'test_labels.pkl'
+    # for complete ICD9 codes
+    test_label_file = 'test_seqs.pkl'
+
 
     x_seq, d_seq, y_seq = load_data(
         test_seq_file,
@@ -296,7 +306,7 @@ def predict_next_visit(med2vec, saver, config, top_n=5):
     x_seq_new = []
     y_seq_new = []
     visit_seq_new = []
-    for i in range(config['n_samples'] - 1):
+    for i in range(len(x_seq) - 1):
         if x_seq[i][0] != -1 and y_seq[i + 1][0] != -1:
             x_seq_new.append(x_seq[i])
             visit_seq_new.append(visit_seq[i])
@@ -340,9 +350,9 @@ def get_config(args):
     config['n_emb'] = 200
     config['n_demo'] = 0
     config['n_hidden'] = 200
-    config['n_output'] = 942
+    config['n_output'] = 4894  # 942 when using train_labels.pkl instead of train_seqs.pkl as label_file
     config['max_epoch'] = 20
-    config['n_samples'] = 27529  # (must include the count of [-1]s)
+    config['n_samples'] = 22138  # train_seqs.pkl
     config['batch_size'] = 256
     config['display_step'] = 1
     config['seq_file'] = args.seq_file
@@ -354,8 +364,8 @@ def get_config(args):
 
 
 def parse_arguments(parser):
-    parser.add_argument('--seq_file', type=str, default='./Med2Vec_data/seqs.pkl', help='The path to the Pickled file containing visit information of patients')
-    parser.add_argument('--label_file', type=str, default='./Med2Vec_data/labels.pkl', help='The path to the Pickled file containing grouped visit information of patients.')
+    parser.add_argument('--seq_file', type=str, default='seqs.pkl', help='The path to the Pickled file containing visit information of patients')
+    parser.add_argument('--label_file', type=str, default='labels.pkl', help='The path to the Pickled file containing grouped visit information of patients.')
     parser.add_argument('--demo_file', type=str, default='', help='The path to the Pickled file containing demographic information of patients. If you are not using patient demographic information, do not use this option')
     parser.add_argument('--model_path', type=str, default='./Med2Vec_model/200emb_200hidden', help='The path to the directory where the model with these params should be saved.')
 
@@ -369,21 +379,23 @@ def main(_):
 
     config = get_config(args)
 
-    # call this for our mini-test set
-    # python3 Med2VecRunner.py --seq_file=./test_2pat_data/seqs.pkl --label_file=./test_2pat_data/labels.pkl --model_path=./Med2Vec_model/test_2pat
+    # call this to train on train data and evaluate on test data, using 3-digit ICD9 codes as labels
+    # python3 Med2VecRunner.py --seq_file=train_seqs.pkl --label_file=train_labels.pkl --model_path=./Med2Vec_model/train_test_split
 
-    # call this for our (pre-split) data
-    # python3 Med2VecRunner.py --seq_file=./Med2Vec_data/seqs.pkl --label_file=./Med2Vec_data/labels.pkl --model_path=./Med2Vec_model/no_train_test_split
+    # call this to train on train data and evaluate on test data, using COMPLETE ICD9 codes as labels
+    # python3 Med2VecRunner.py --seq_file=train_seqs.pkl --label_file=train_seqs.pkl --model_path=./Med2Vec_model/icd_complete_train_test_split
 
-    # call this to train on train data and evaluate on test data
-    # python3 Med2VecRunner.py --seq_file=./Med2Vec_data/train_seqs.pkl --label_file=./Med2Vec_data/train_labels.pkl --model_path=./Med2Vec_model/train_test_split
-
-    med2vec = Med2Vec(n_input=config['n_input'], n_emb=config['n_emb'], n_demo=config['n_demo'],
-                      n_hidden=config['n_hidden'], n_output=config['n_output'], n_windows=config['n_windows'])
+    med2vec = Med2Vec(n_input=config['n_input'],
+                      n_emb=config['n_emb'],
+                      n_demo=config['n_demo'],
+                      n_hidden=config['n_hidden'],
+                      n_output=config['n_output'],
+                      n_windows=config['n_windows']
+                      )
     saver = tf.train.Saver()
     model_train(med2vec, saver, config)
     #show_code_representation(med2vec, saver, config)
-    predict_next_visit(med2vec, saver, config, top_n=30)
+    #predict_next_visit(med2vec, saver, config, top_n=5)
     #interpret_code_representation(med2vec, saver, config)
 
 

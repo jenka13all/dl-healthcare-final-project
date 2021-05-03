@@ -55,6 +55,7 @@ class Med2Vec(object):
         # CORRECTION
         # minimize error of code cost
         # this captures the co-occurrence information of codes within visits
+        # final cost with this (on train/test split):  85,020
         self.emb_cost = self._initialize_emb_cost()
 
         # combine visit and embedding (code) obj. functions to learn both visit and code representations
@@ -160,9 +161,6 @@ class Med2Vec(object):
         emb_cost = -tf.log((exp / tf.gather(norms, self.i_vec)) + self.log_eps)
 
         # vector of costs: take the mean
-
-        # final cost (20 epochs): 103,471
-        # final cost (20 epochs): 122,288
         return tf.reduce_mean(emb_cost)
 
     def partial_fit(self, x=None, d=None, y=None, mask=None, i_vec=None, j_vec=None):
@@ -183,8 +181,14 @@ class Med2Vec(object):
                                       }
                                       )
         else:
-            cost, opt = self.sess.run((self.cost, self.optimizer), feed_dict=
-            {self.x: x, self.mask: mask, self.i_vec: i_vec, self.j_vec: j_vec})
+            cost, opt = self.sess.run((self.cost, self.optimizer),
+                                      feed_dict={
+                                          self.x: x,
+                                          self.mask: mask,
+                                          self.i_vec: i_vec,
+                                          self.j_vec: j_vec
+                                      }
+                                      )
         return cost
 
     def get_code_representation(self, x=None, d=None):
