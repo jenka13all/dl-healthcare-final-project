@@ -41,7 +41,7 @@ def get_care_condition_for_med2vec_id(code):
 
 
 # patient medical codes: training and test
-data_path = '../tensorflow-implementation/Med2Vec_data/'
+data_path = '../Med2Vec_data/'
 pat_seqs = np.array(pickle.load(open(data_path + 'seqs.pkl', 'rb')), dtype=object)
 train_pat_seqs = np.array(pickle.load(open(data_path + 'train_seqs.pkl', 'rb')), dtype=object)
 test_pat_seqs = np.array(pickle.load(open(data_path + 'test_seqs.pkl', 'rb')), dtype=object)

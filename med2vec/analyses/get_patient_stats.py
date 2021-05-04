@@ -4,8 +4,8 @@ from collections import defaultdict
 import matplotlib.pyplot as plt
 
 
-pat_seqs = np.array(pickle.load(open('../output/processed.seqs', 'rb')), dtype=object)
-pat_labels = np.array(pickle.load(open('../output/processed.3digitICD9.seqs', 'rb')), dtype=object)
+pat_seqs = np.array(pickle.load(open('../Med2Vec_data/seqs.pkl', 'rb')), dtype=object)
+pat_labels = np.array(pickle.load(open('../Med2Vec_data/labels.pkl', 'rb')), dtype=object)
 
 print('total visits', len(pat_seqs))
 

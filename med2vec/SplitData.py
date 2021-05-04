@@ -1,6 +1,8 @@
 import numpy as np
 import pickle
 
+# splits data into TRAIN and TEST subsets
+
 
 def load_data(x_file, d_file, y_file):
     x_file = './Med2Vec_data/' + x_file

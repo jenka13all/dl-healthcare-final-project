@@ -17,8 +17,8 @@ seqs_pat1_visit1 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 labels_pat1_visit1 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 # Med2Vec patient medical codes and labels
-pat_seqs = np.array(pickle.load(open('../output/processed.seqs', 'rb')), dtype=object)
-pat_labels = np.array(pickle.load(open('../output/processed.3digitICD9.seqs', 'rb')), dtype=object)
+pat_seqs = np.array(pickle.load(open('../Med2Vec_data/seqs.pkl', 'rb')), dtype=object)
+pat_labels = np.array(pickle.load(open('../Med2Vec_data/labels.pkl', 'rb')), dtype=object)
 
 # dictionaries mapping Med2Vec ICD9 codes to MIMIC-III ICD9 codes
 med2vec_to_mimic3_seqs = pickle.load(open(resource_path + 'seqs_to_icd.dict', 'rb'))
