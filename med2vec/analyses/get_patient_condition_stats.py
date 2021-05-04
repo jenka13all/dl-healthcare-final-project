@@ -77,6 +77,7 @@ def get_care_condition_prevalence(pat_seqs):
                     pat_conditions[pat_idx].append(task_nr)
                     prevalence_count_dict[task_nr] += 1
 
+    print(pat_conditions)
     total_patients = pat_idx + 1
 
     prevalence_dict = {}
@@ -86,8 +87,44 @@ def get_care_condition_prevalence(pat_seqs):
     return prevalence_dict
 
 
-train_prevalence_dict = get_care_condition_prevalence(train_pat_seqs)
-test_prevalence_dict = get_care_condition_prevalence(test_pat_seqs)
+def get_care_condition_prevalence_last_visit(pat_seqs):
+    prevalence_count_dict = defaultdict(int)
+    pat_idx = 0
+    pat_conditions = {pat_idx: []}
+    for visit_idx, seq in enumerate(pat_seqs):
+        if seq == [-1] or seq == -1:
+            # new patient
+            pat_conditions[pat_idx] = []
+
+            # we want any care conditions in the LAST visit only
+            # that's the sequence right before this one
+            last_visit = pat_seqs[visit_idx-1]
+
+            for code in last_visit:
+                task_nr = get_care_condition_for_med2vec_id(code)
+                # only add to total prevalence if unique for this patient (i.e. no duplicates per patient)
+                if task_nr is not None and task_nr not in pat_conditions[pat_idx]:
+                    pat_conditions[pat_idx].append(task_nr)
+                    prevalence_count_dict[task_nr] += 1
+
+            pat_idx += 1
+
+    total_patients = pat_idx + 1
+
+    prevalence_dict = {}
+    for task, total in prevalence_count_dict.items():
+        prevalence_dict[task] = round(total / total_patients, 3)
+
+    return prevalence_dict
+
+
+#two_pat_seqs = np.append(two_pat_seqs, np.array([-1]))
+#two_pat_cond_dict = get_care_condition_prevalence_last_visit(two_pat_seqs)
+
+train_pat_seqs = np.append(train_pat_seqs, np.array([-1]))
+test_pat_seqs = np.append(test_pat_seqs, np.array([-1]))
+train_prevalence_dict = get_care_condition_prevalence_last_visit(train_pat_seqs)
+test_prevalence_dict = get_care_condition_prevalence_last_visit(test_pat_seqs)
 
 with open(resource_path + 'care_condition_train_prevalence.dict', 'wb') as f1:
     pickle.dump(train_prevalence_dict, f1)
