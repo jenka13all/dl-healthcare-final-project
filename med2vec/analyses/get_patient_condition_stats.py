@@ -60,6 +60,7 @@ med2vec_code_to_id_seq = get_med2vec_to_id_dict(resource_path)
 med2vec_to_mimic3_seqs = pickle.load(open(resource_path + 'seqs_to_icd.dict', 'rb'))
 
 
+# get overall care condition prevalence (over all visits)
 def get_care_condition_prevalence(pat_seqs):
     prevalence_count_dict = defaultdict(int)
     pat_idx = 0
@@ -87,6 +88,7 @@ def get_care_condition_prevalence(pat_seqs):
     return prevalence_dict
 
 
+# get care condition prevalence for last visit only (the visit we are predicting on)
 def get_care_condition_prevalence_last_visit(pat_seqs):
     prevalence_count_dict = defaultdict(int)
     pat_idx = 0
@@ -121,11 +123,14 @@ def get_care_condition_prevalence_last_visit(pat_seqs):
 #two_pat_seqs = np.append(two_pat_seqs, np.array([-1]))
 #two_pat_cond_dict = get_care_condition_prevalence_last_visit(two_pat_seqs)
 
+# have to add a [-1] as last element of the whole sequence, so we get the last sequence too
 train_pat_seqs = np.append(train_pat_seqs, np.array([-1]))
 test_pat_seqs = np.append(test_pat_seqs, np.array([-1]))
+
 train_prevalence_dict = get_care_condition_prevalence_last_visit(train_pat_seqs)
 test_prevalence_dict = get_care_condition_prevalence_last_visit(test_pat_seqs)
 
+# save train and test last visit prevalence to pickled dicts for later use
 with open(resource_path + 'care_condition_train_prevalence.dict', 'wb') as f1:
     pickle.dump(train_prevalence_dict, f1)
 
