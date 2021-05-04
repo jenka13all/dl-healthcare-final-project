@@ -32,6 +32,8 @@ My own original code includes:
   
 * functions for preparing the data for AUC-ROC metric evaluation on care-conditions in the final visit (in Med2VecRunner.py)
 
+* function for calculating the code embedding cost (in Med2Vec.py)
+
 * functions for evaluating the AUC-ROC metric on the care-conditions predicted in each last visit 
   ("analyses/calculate_metrics.py")
 
@@ -39,6 +41,9 @@ My own original code includes:
   test and train subsets, distribution of the number of visits and number of codes, and the creation of
   various pre-processed data for mapping Med2Vec codes to MIMIC-III codes and care-conditions 
   (in the "analyses" directory)
+  
+* code for allowing the user to specify data files and model path on the command line instead of having to 
+  alter the hard-coding in Med2VecRunner.py
 
 To reproduce my experiment, clone this repository and:
 
