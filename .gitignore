@@ -1,6 +1,7 @@
 .idea
 .python-version
-convae/convae_steps.txt
-convae/encodings/
-med2vec/.python-version
 benchmarks/.python-version
+convae/.python-version
+convae/data/encodings/
+convae/model/__pycache__/
+med2vec/.python-version
