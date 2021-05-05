@@ -4,4 +4,5 @@ benchmarks/.python-version
 convae/.python-version
 convae/data/encodings/
 convae/model/__pycache__/
+convae/steps.txt
 med2vec/.python-version
