@@ -399,7 +399,7 @@ def get_config(args):
     config['n_emb'] = 200
     config['n_demo'] = 0
     config['n_hidden'] = 200
-    config['n_output'] = 4894  # 4894 for full ICD9s, 49 for 2 pat test, 942 on 3-digit IDC9s
+    config['n_output'] = 942  # 4894 for full ICD9s, 49 for 2 pat test, 942 on 3-digit IDC9s
     config['max_epoch'] = 20
     config['n_samples'] = 22138  # train_seqs.pkl, 8 when using 2 pat test
     config['batch_size'] = 256
