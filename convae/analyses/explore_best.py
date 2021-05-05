@@ -1,9 +1,9 @@
 import torch
-import os
 import model.net as net
 import csv
 
-checkpoint_file = '../checkpoints/best_model.pt'
+checkpoint_file = 'checkpoints/best_model.pt'
+vocab_file = 'data/cohort-vocab.csv'
 
 # model parameters
 model_param = {'num_epochs': 5,
@@ -18,8 +18,8 @@ model_param = {'num_epochs': 5,
 len_padded = 32
 
 
-def get_vocab():
-    with open('../data/cohort-vocab.csv') as f:
+def get_vocab(vocab_file):
+    with open(vocab_file) as f:
         rd = csv.reader(f)
         next(rd)
         vocab = {}
@@ -30,7 +30,7 @@ def get_vocab():
     return vocab, vocab_size
 
 
-vocab, vocab_size = get_vocab()
+vocab, vocab_size = get_vocab(vocab_file)
 
 model = net.ehrEncoding(vocab_size=vocab_size,
                         max_seq_len=len_padded,

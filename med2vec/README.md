@@ -52,18 +52,27 @@ cd med2vec
 pip install requirements.txt
 ```
 
-In Med2VecRunner.py, uncomment the lines for training the model and predicting next visit, as desired.
+In Med2VecRunner.py, uncomment the lines for training the model and predicting next visit, as desired. When
+predicting next visit, make sure to indicate use of 3-digit ICD9 codes for labelling by setting the "three_digit"
+parameter of "predict_next_visit()" to True or False, accordingly.
 
-To train a model on complete ICD9 codes, the label file is the same as the sequence file. Call the following
-command with your model path of choice. 
+To train a model on 3-digit ICD9 codes, call the following command with your model path of choice. 
 
 ```
-python Med2VecRunner.py --seq_file=./Med2Vec_data/train_seqs.pkl --label_file=./Med2Vec_data/train_seqs.pkl --model_path=./Med2Vec_model/your_path_here
+python Med2VecRunner.py --seq_file=./Med2Vec_data/train_seqs.pkl --label_file=./Med2Vec_data/label_seqs.pkl --model_path=./Med2Vec_model/your_path_here
 ```
 
 If you change the paths to the data files (seq_file and label_file), make sure to update the parameters 
-appropriately for n_input, n_output, and n_samples in the configuration dictionary (get_config()), and possibly
-the test files called in predict_next_visit(). Other model parameters can be updated in get_config().
+appropriately for n_input, n_output, and n_samples in the configuration dictionary (get_config()).
+
+To evaluate the results, set the model path in "analyses/calculate_metrics.py" (within the file) and call:
+
+```
+cd analyses
+python calculate_metrics.py
+```
+
+This will create a JSON file in your model path with the AUC-ROC scores for each care-condition.
 
 ## References
 
