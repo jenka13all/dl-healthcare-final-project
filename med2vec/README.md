@@ -38,7 +38,8 @@ My own original code includes:
   ("analyses/calculate_metrics.py")
 
 * functions for calculating various statistics such as number of patients and care-condition prevalence in 
-  test and train subsets, distribution of the number of visits and number of codes, and the creation of
+  test and train subsets, distribution of the number of visits and number of codes, calculating Pearson's 
+  correlation coefficient and p-value on prevalence of care condition an AUC-ROC score, and the creation of
   various pre-processed data for mapping Med2Vec codes to MIMIC-III codes and care-conditions 
   (in the "analyses" directory)
   
