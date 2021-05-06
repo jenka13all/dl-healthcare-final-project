@@ -1,5 +1,6 @@
 import pandas as pd
 import argparse
+import csv
 
 parser = argparse.ArgumentParser(description='Create cohort vocabulary from MIMIC-III CSV diagnosis and item files.')
 parser.add_argument('mimic3_path', type=str, help='Directory containing MIMIC-III CSV files.')
@@ -21,7 +22,7 @@ def create_vocab(data_path):
     """
 
     # populate diagnoses
-    d_diagnoses = pd.read_csv(data_path+'D_ICD_DIAGNOSES.csv', usecols=['ICD9_CODE', 'LONG_TITLE'], dtype=str)
+    d_diagnoses = pd.read_csv(data_path + '/D_ICD_DIAGNOSES.csv', usecols=['ICD9_CODE', 'LONG_TITLE'], dtype=str)
     vocab_diagnoses = pd.DataFrame(
         data={
             'LABEL': 'DIAGNOSIS_' + d_diagnoses['ICD9_CODE'].astype(str),
@@ -32,7 +33,7 @@ def create_vocab(data_path):
     )
 
     # populate microbiology
-    d_items = pd.read_csv(data_path+'D_ITEMS.csv', usecols=['LINKSTO', 'ITEMID', 'LABEL'], dtype=str)
+    d_items = pd.read_csv(data_path + '/D_ITEMS.csv', usecols=['LINKSTO', 'ITEMID', 'LABEL'], dtype=str)
     d_items = d_items[d_items['LINKSTO'] == 'microbiologyevents']
     vocab_items = pd.DataFrame(
         data={
@@ -45,7 +46,7 @@ def create_vocab(data_path):
 
     # populate lab
     d_lab = pd.read_csv(
-        data_path+'D_LABITEMS.csv',
+        data_path + '/D_LABITEMS.csv',
         usecols=['LOINC_CODE', 'ITEMID', 'LABEL', 'FLUID', 'CATEGORY'],
         dtype=str
     )
@@ -79,3 +80,5 @@ database_path = args.mimic3_path
 total_vocab = create_vocab(database_path)
 
 print('total vocabulary of ', str(total_vocab), ' medical concepts')
+
+# python3 create_mimic3_vocab.py mimic-iii-clinical-database-1.4
