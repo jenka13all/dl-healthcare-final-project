@@ -5,7 +5,7 @@ This repository aggregates the results of the phenotyping prediction task descri
 The results stem from running the complete Benchmark model for the phenotype prediction task, 
 available in the study's [public Github repository](https://github.com/YerevaNN/mimic3-benchmarks).
 
-get_stats.py:
+analyses/get_stats.py:
 <br>formats phenotype prediction task results so that each of 25 care conditions
 is shown in tabular format with its prevalence within the patient data (test and train splits), 
 its type (chronic, acute, or both) and the AUC-ROC score it received from the Benchmark evaluation. 
@@ -13,8 +13,12 @@ its type (chronic, acute, or both) and the AUC-ROC score it received from the Be
 This tabular format gives us an overview of the relationship (if any) between prevalence, type and 
 predictive ability concerning individual care conditions.
 
-get_patient_stats.py
+analyses/get_patient_stats.py
 <br>simply sums up the number of patients for each split: train, test and evaluation.
+
+map_task_nr_to_codes.py
+<br>maps "task number" to care conditions in resources/hcup_ccs_2015_definitions_benchmark.yaml 
+and creates pickled dictionary in resources for later use
 
 ## References
 

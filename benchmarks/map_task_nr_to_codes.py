@@ -2,6 +2,10 @@ import pickle
 import yaml
 from collections import defaultdict
 
+'''
+maps "task number" of care conditions to phenotype codes
+'''
+
 resources_path = 'resources/'
 
 with open(resources_path + 'hcup_ccs_2015_definitions_benchmark.yaml', 'r') as f:
