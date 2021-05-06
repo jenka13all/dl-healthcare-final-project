@@ -45,12 +45,10 @@ $ pip install -r requirements.txt
 
 To prepare the data:
 
-1. The following step creates a vocabulary file - "cohort-vocab.csv" - from D_ICD_DIAGNOSES.csv and D_ITEMS.csv It takes into account
-   the fact that the Benchmark study pre-selects 17 medical concepts (mostly vital signs) to group together.
-   This grouping reduces noise and focuses on what the Benchmark study authors believe to be the most significant
-   features for patient representation. 
+1. The following step creates a vocabulary file - "cohort-vocab.csv" - from ICD9 diagnoses, lab events, and
+   microbiology events.
    
-       python process-mimic3.py {PATH TO MIMIC-III CSVs}
+       python create_mimic3_vocab {PATH TO MIMIC-III CSVs}
 
 2. The following steps create two sequence files - "cohort-ehrseq.csv" for train and "cohort_test-ehrseq.csv" for test - 
    for patients, using their diagnoses (only). Future code will integrate vital signs 
@@ -58,12 +56,13 @@ To prepare the data:
    "mimic3-benchmarks/data/root". Use the COHORT_TYPE parameter "train" for the training cohort, and "test" for the
    testing cohort.
 
-       python3 create_diagnosis_seq.py {PATH TO MIMIC-III root patient data} train
+       python3 create_patient_seqs.py {PATH TO MIMIC-III root patient data} train
 
-       python3 create_diagnosis_seq.py {PATH TO MIMIC-III root patient data} test
+       python3 create_patient_seqs.py {PATH TO MIMIC-III root patient data} test
 
 3. Once you have generated these three files - "cohort-vocab.csv", "cohort-ehrseq.csv" and "cohort_test-ehr.csv",
-   you can upload them to the "data_example" directory of wherever you are hosting the [ConvAE Architecture code](http://github.com/landiisotta/convae_architecture) 
+   you can upload them to the "data_example" directory of wherever you are hosting the 
+   [ConvAE Architecture code](http://github.com/landiisotta/convae_architecture) 
    and train the models on them as described by that repository. 
 
 ## References
