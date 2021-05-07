@@ -47,17 +47,18 @@ train_pat_seqs = np.array(pickle.load(open(data_path + 'train_seqs.pkl', 'rb')),
 test_pat_seqs = np.array(pickle.load(open(data_path + 'test_seqs.pkl', 'rb')), dtype=object)
 two_pat_seqs = np.array(pickle.load(open(data_path + 'test_2pat_data/seqs.pkl', 'rb')), dtype=object)
 
-resource_path = '../resources/'
+local_resources_path = '../resources/'
+common_resource_path = '../../common_resources/'
 
 # dictionaries mapping "task number" to phenotype label and MIMIC-III ICD9 codes
-task_nr_to_phen_label = pickle.load(open(resource_path + 'task_nr_to_phenotype_label.dict', 'rb'))
-task_nr_to_phen_codes = pickle.load(open(resource_path + 'task_nr_to_phenotype_codes.dict', 'rb'))
+task_nr_to_phen_label = pickle.load(open(common_resource_path + 'task_nr_to_phenotype_label.dict', 'rb'))
+task_nr_to_phen_codes = pickle.load(open(common_resource_path + 'task_nr_to_phenotype_codes.dict', 'rb'))
 
 # dictionary of Med2Vec ICD code to Med2Vec ID
-med2vec_code_to_id_seq = get_med2vec_to_id_dict(resource_path)
+med2vec_code_to_id_seq = get_med2vec_to_id_dict(local_resources_path)
 
 # dictionary mapping Med2Vec IDs to MIMIC-3 ICD codes
-med2vec_to_mimic3_seqs = pickle.load(open(resource_path + 'seqs_to_icd.dict', 'rb'))
+med2vec_to_mimic3_seqs = pickle.load(open(local_resources_path + 'seqs_to_icd.dict', 'rb'))
 
 
 # get overall care condition prevalence (over all visits)
@@ -131,8 +132,8 @@ train_prevalence_dict = get_care_condition_prevalence_last_visit(train_pat_seqs)
 test_prevalence_dict = get_care_condition_prevalence_last_visit(test_pat_seqs)
 
 # save train and test last visit prevalence to pickled dicts for later use
-with open(resource_path + 'care_condition_train_prevalence.dict', 'wb') as f1:
+with open(local_resources_path + 'care_condition_train_prevalence.dict', 'wb') as f1:
     pickle.dump(train_prevalence_dict, f1)
 
-with open(resource_path + 'care_condition_test_prevalence.dict', 'wb') as f1:
+with open(local_resources_path + 'care_condition_test_prevalence.dict', 'wb') as f1:
     pickle.dump(test_prevalence_dict, f1)

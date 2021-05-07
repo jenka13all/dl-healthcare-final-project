@@ -10,25 +10,6 @@ formats the results JSON into tabular format and saves as csv file
 '''
 
 
-def get_phenotype_labels(filename):
-    if os.path.isfile(filename):
-        return pickle.load(open(filename, 'rb'))
-
-    # map "task number" (e.g. "1", "2") to correct conditions
-    labels_file = '../pat_data/phenotype_labels.csv'
-    labels = pd.read_csv(labels_file)
-    labels = list(labels.head(1))
-
-    phenotype_labels = {}
-    for i in range(1, len(labels)+1):
-        phenotype_labels[i] = labels[i-1]
-
-    with open(filename, 'wb') as f1:
-        pickle.dump(phenotype_labels, f1)
-
-    return phenotype_labels
-
-
 def convert_json_results_to_dict(results_json, phenotype_labels):
     with open(results_json) as json_file:
         results = json.load(json_file)
@@ -87,7 +68,7 @@ common_resources_path = '../../common_resources/'
 with open(common_resources_path + 'hcup_ccs_2015_definitions_benchmark.yaml', 'r') as f:
     definitions = yaml.load(f, Loader=yaml.FullLoader)
 
-phenotype_labels = get_phenotype_labels(common_resources_path + 'task_nr_to_phenotype_label.dict')
+phenotype_labels = common_resources_path + 'task_nr_to_phenotype_label.dict'
 
 # open pheno_results.json
 #results_json = data_path + 'evaluation/pheno_results.json'

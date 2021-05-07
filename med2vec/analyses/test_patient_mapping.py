@@ -10,7 +10,8 @@ def get_key(my_dict, val):
     return 'Key doesn\'t exist'
 
 
-resource_path = '../resources/'
+common_resource_path = '../../common_resources/'
+local_resource_path = '../resources/'
 
 # test set
 seqs_pat1_visit1 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -21,22 +22,22 @@ pat_seqs = np.array(pickle.load(open('../Med2Vec_data/seqs.pkl', 'rb')), dtype=o
 pat_labels = np.array(pickle.load(open('../Med2Vec_data/labels.pkl', 'rb')), dtype=object)
 
 # dictionaries mapping Med2Vec ICD9 codes to MIMIC-III ICD9 codes
-med2vec_to_mimic3_seqs = pickle.load(open(resource_path + 'seqs_to_icd.dict', 'rb'))
-med2vec_to_mimic3_labels = pickle.load(open(resource_path + 'labels_to_icd.dict', 'rb'))
+med2vec_to_mimic3_seqs = pickle.load(open(local_resource_path + 'seqs_to_icd.dict', 'rb'))
+med2vec_to_mimic3_labels = pickle.load(open(local_resource_path + 'labels_to_icd.dict', 'rb'))
 
 # dictionary of the mapping of Med2Vec complete ICD9 codes (sequences) to Med2Vec IDs
-with open(resource_path + 'processed.types', 'r') as f1:
+with open(local_resource_path + 'processed.types', 'r') as f1:
     for line in f1:
         med2vec_code_to_id_seq = eval(line)
 
 # dictionary of the mapping of Med2Vec 3-digit ICD9 codes (labels) to Med2Vec IDs
-with open(resource_path + 'processed.3digitICD9.types', 'r') as f1:
+with open(local_resource_path + 'processed.3digitICD9.types', 'r') as f1:
     for line in f1:
         med2vec_code_to_id_label = eval(line)
 
 # dictionaries mapping "task number" to phenotype label and MIMIC-III ICD9 codes
-task_nr_to_phen_label = pickle.load(open(resource_path + 'task_nr_to_phenotype_label.dict', 'rb'))
-task_nr_to_phen_codes = pickle.load(open(resource_path + 'task_nr_to_phenotype_codes.dict', 'rb'))
+task_nr_to_phen_label = pickle.load(open(common_resource_path + 'task_nr_to_phenotype_label.dict', 'rb'))
+task_nr_to_phen_codes = pickle.load(open(common_resource_path + 'task_nr_to_phenotype_codes.dict', 'rb'))
 
 # good news: all codes (ints mapping to ICD9s) are unique in processed.seqs and in processed.3digitICD9.seqs
 # bad news: 3-digit ICD9 labels do not map to unique care conditions

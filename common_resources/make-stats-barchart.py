@@ -4,8 +4,8 @@ import numpy as np
 
 
 labels = ['Total', 'Train', 'Test']
-bench = [33678, 23466, 5068]
-convae = [33034, 28081, 4962]
+bench = [28543, 23466, 5068]
+convae = [33043, 28081, 4962]
 med2vec = [7537, 6029, 1508]
 
 x = np.arange(len(labels))  # the label locations

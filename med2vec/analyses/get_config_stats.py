@@ -19,11 +19,11 @@ def load_data(x_file, d_file, y_file):
     return x_seq, d_seq, y_seq
 
 
-x_seq, d_seq, y_seq = load_data(
-    'test_2pat_data/seqs.pkl',
+train_seq, d_seq, test_seq = load_data(
+    'train_seqs.pkl',
     '',
-    'test_2pat_data/labels.pkl'
+    'test_seqs.pkl'
 )
 
-print('len(x_seq)', len(x_seq))
-print('len(y_seq)', len(y_seq))
+print('len(train_seq)', len(train_seq))
+print('len(test_seq)', len(test_seq))

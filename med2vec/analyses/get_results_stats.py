@@ -15,10 +15,10 @@ def get_pearson_cc(file_path, study_name):
     return x, y
 
 
-bench_results = '../../benchmarks/data/phenotyping/evaluation/results_table.csv'
+bench_results = '../../benchmarks/data/phenotyping/evaluation/orig_results_table.csv'
 bx, by = get_pearson_cc(bench_results, 'Benchmark')
 
-med2vec_results = '../resources/results_table.csv'
+med2vec_results = '../resources/orig_results_table.csv'
 mx, my = get_pearson_cc(med2vec_results, 'Med2Vec')
 
 plt.style.use('ggplot')
@@ -27,7 +27,7 @@ slope, intercept, r, p, stderr = scipy.stats.linregress(mx, my)
 line = f'Pearson Correlation Coefficient: {r:.2f}, p-value: {p: 5f}'
 
 fig, ax = plt.subplots()
-ax.plot(mx, my, linewidth=0, marker='s', label='Data points')
+ax.plot(mx, my, linewidth=0, marker='s', label='Care-conditions')
 ax.plot(mx, intercept + slope * mx, label=line)
 ax.set_xlabel('Care-condition Prevalence')
 ax.set_ylabel('AUC-ROC score')
