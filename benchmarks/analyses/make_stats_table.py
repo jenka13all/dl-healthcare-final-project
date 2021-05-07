@@ -2,31 +2,63 @@ import pandas as pd
 import yaml
 import json
 import pickle
+import os
 
 '''
 maps the "task number" in the results JSON to care condition name
 formats the results JSON into tabular format and saves as csv file
 '''
 
+
+def get_phenotype_labels(filename):
+    if os.path.isfile(filename):
+        return pickle.load(open(filename, 'rb'))
+
+    # map "task number" (e.g. "1", "2") to correct conditions
+    labels_file = '../data/root/phenotype_labels.csv'
+    labels = pd.read_csv(labels_file)
+    labels = list(labels.head(1))
+
+    phenotype_labels = {}
+    for i in range(1, len(labels)+1):
+        phenotype_labels[i] = labels[i-1]
+
+    with open(filename, 'wb') as f1:
+        pickle.dump(phenotype_labels, f1)
+
+    return phenotype_labels
+
+
+def get_results_table(filename, final_results_dict, train, test, definitions):
+    if os.path.isfile(filename):
+        return pd.read_csv(filename)
+
+    # build final dataframe of care condition, type, prevalence over all visits in split, AUC-ROC
+    metrics_df = pd.DataFrame(columns=['Phenotype', 'Type', 'Train', 'Test', 'AUC-ROC'])
+    i = 0
+    for rx, metrics in final_results_dict.items():
+        prev_train = round((train[rx].sum() / total_train), 3)
+        prev_test = round((test[rx].sum() / total_test), 3)
+
+        auc_roc = round(metrics['value'], 3)
+        rx_type = definitions[rx]['type']
+
+        metrics_df.loc[i] = [rx, rx_type, prev_train, prev_test, auc_roc]
+        i += 1
+
+    # save final dataframe to CSV
+    metrics_df.to_csv(filename, float_format='%.3f')
+
+    return metrics_df
+
+
 data_path = '../data/phenotyping/'
-resources_path = '../resources/'
+resources_path = '../../common_resources/'
 
 with open(resources_path + 'hcup_ccs_2015_definitions_benchmark.yaml', 'r') as f:
     definitions = yaml.load(f, Loader=yaml.FullLoader)
 
-# map "task number" (e.g. "1", "2") to correct conditions
-labels_file = '../data/root/phenotype_labels.csv'
-labels = pd.read_csv(labels_file)
-labels = list(labels.head(1))
-
-phenotype_labels = {}
-for i in range(1, len(labels)+1):
-    phenotype_labels[i] = labels[i-1]
-
-'''
-with open(resources_path + 'task_nr_to_phenotype_label.dict', 'wb') as f1:
-    pickle.dump(phenotype_labels, f1)
-'''
+phenotype_labels = get_phenotype_labels(resources_path + 'task_nr_to_phenotype_label.dict')
 
 # open pheno_results.json
 results_json = data_path + 'evaluation/pheno_results.json'
@@ -45,24 +77,17 @@ for i in range(1, 26):
     key = phenotype_labels[i]
     final_results_dict[key] = results_dict[i]
 
+# get prevalence of each care-condition in train and test population
+# this is prevalence over all visits, by the way
 test = pd.read_csv(data_path+'test_listfile.csv')
 train = pd.read_csv(data_path+'train_listfile.csv')
 
-total_test = test.shape[0]
-total_train = train.shape[0]
+results = get_results_table(
+    data_path + 'evaluation/results_table.csv',
+    final_results_dict,
+    train,
+    test,
+    definitions
+)
 
-# build final dataframe of care condition, type, prevalence for each patient split, AUC-ROC
-metrics_df = pd.DataFrame(columns=['Phenotype', 'Type', 'Train', 'Test', 'AUC-ROC'])
-i = 0
-for rx, metrics in final_results_dict.items():
-    prev_train = round((train[rx].sum()/total_train), 3)
-    prev_test = round((test[rx].sum()/total_test), 3)
-
-    auc_roc = round(metrics['value'], 3)
-    rx_type = definitions[rx]['type']
-
-    metrics_df.loc[i] = [rx, rx_type, prev_train, prev_test, auc_roc]
-    i += 1
-
-# save final dataframe to CSV
-#metrics_df.to_csv(data_path+'evaluation/results_table.csv', float_format='%.3f')
+print(results)
