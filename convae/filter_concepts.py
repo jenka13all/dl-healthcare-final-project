@@ -136,11 +136,11 @@ filter_scores_dict = make_filter_scores_dict(doc_freq_dict, term_freq_dict, 'res
 train_seq.close()
 test_seq.close()
 
-#print(len(filter_scores_dict))
+print(len(filter_scores_dict))
 
 # number of terms with score of < 10e-6
-#res = sum(x < 0.000001 for x in filter_scores_dict.values())
-#print('nr of scores = 0', res)
+res = sum(x < 0.000001 for x in filter_scores_dict.values())
+print('nr of scores = 0', res)
 
 # what's the distribution of filter scores?
 #import matplotlib.pyplot as plt
