@@ -1,6 +1,7 @@
 .idea
 .python-version
 benchmarks/.python-version
+common_resources/.python-version
 convae/.python-version
 convae/data/encodings/
 convae/model/__pycache__/
