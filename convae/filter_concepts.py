@@ -2,6 +2,7 @@ import os.path
 from csv import reader, DictReader
 from collections import defaultdict
 import pickle
+import utils as ut
 
 
 # returns the total number of patients ("sentences")
@@ -79,7 +80,7 @@ def get_doc_freq(train_seq, test_seq, dict_file):
     doc_length = get_doc_length(train_seq, test_seq)
 
     doc_freq = defaultdict(float)
-    with open('data/cohort-vocab.csv', 'r') as vocab:
+    with open('data/cohort_vocab.csv', 'r') as vocab:
         vocab_reader = DictReader(vocab)
         for row in vocab_reader:
             item = str(row['INDEX'])
@@ -101,7 +102,7 @@ def get_term_freq(train_seq, test_seq, dict_file):
         return pickle.load(open(dict_file, 'rb'))
 
     term_freq = defaultdict(float)
-    with open('data/cohort-vocab.csv', 'r') as vocab:
+    with open('data/cohort_vocab.csv', 'r') as vocab:
         vocab_reader = DictReader(vocab)
         for row in vocab_reader:
             item = str(row['INDEX'])
@@ -126,8 +127,8 @@ def make_filter_scores_dict(df_dict, tf_dict, dict_file):
     return filter_scores
 
 
-train_seq = open('data/cohort-ehrseq.csv', 'r')
-test_seq = open('data/cohort_test-ehrseq.csv', 'r')
+train_seq = open(os.path.join('data', ut.dt_files['ehr-file']), 'r')
+test_seq = open(os.path.join('data', ut.dt_files['ehr-file-test']), 'r')
 
 doc_freq_dict = get_doc_freq(train_seq, test_seq, 'resources/doc_freq_dict.pkl')
 term_freq_dict = get_term_freq(train_seq, test_seq, 'resources/term_freq_dict.pkl')

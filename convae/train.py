@@ -42,7 +42,7 @@ def train(model, optimizer, loss_fn, data_iter_tr):
 
 
 def train_and_evaluate(model, data_iter_tr, data_iter_ts,
-                       loss_fn, optimizer, metrics, exp_dir):
+                       loss_fn, optimizer, metrics, exp_dir, test_set):
     loss_vect = []
     n_epoch = ut.model_param['num_epochs']
     for epoch in range(1, n_epoch + 1):
@@ -58,7 +58,6 @@ def train_and_evaluate(model, data_iter_tr, data_iter_ts,
         is_best_1 = loss_mean < 0.1
         is_best_2 = epoch == n_epoch
         if is_best_1 or is_best_2:
-
             outfile = os.path.join(exp_dir, 'TRconvae-avg_vect.csv')
             with open(outfile, 'w') as f:
                 wr = csv.writer(f)
@@ -87,7 +86,13 @@ def train_and_evaluate(model, data_iter_tr, data_iter_ts,
             ut.save_best_model(epoch, model, optimizer, loss_mean, exp_dir)
 
             print('\nEvaluating the model')
-            mrn, encoded, encoded_avg, test_metrics = evaluate(
-                model, loss_fn, data_iter_ts, metrics, best_eval=True)
+            mrn, encoded, encoded_avg, test_metrics, ts_decoded = evaluate(
+                model,
+                loss_fn,
+                data_iter_ts,
+                metrics,
+                test_set,
+                best_eval=True
+            )
 
-            return mrn, encoded, encoded_avg, test_metrics
+            return mrn, encoded, encoded_avg, test_metrics, ts_decoded

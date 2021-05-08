@@ -9,7 +9,7 @@ args, _ = parser.parse_known_args()
 
 def create_vocab(data_path):
     """
-    creates a CSV file, data/cohort-vocab.csv, from mimic3:
+    creates a CSV file, data/cohort_vocab.csv, from mimic3:
     D_ICD_DIAGNOSES.csv (ICD9 diagnoses)
     D_ITEMS.csv (microbiology events only)
     D_LABITEMS.csv (lab events)
@@ -67,7 +67,7 @@ def create_vocab(data_path):
 
     # write cohort-vocab to CSV
     vocab.to_csv(
-        'data/cohort-vocab.csv',
+        'data/cohort_vocab.csv',
         quoting=csv.QUOTE_NONE,
         escapechar='\\',
         index_label='INDEX'

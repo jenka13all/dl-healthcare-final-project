@@ -2,6 +2,7 @@ import pandas as pd
 import os
 from tqdm import tqdm
 import argparse
+import utils as ut
 
 parser = argparse.ArgumentParser(description='Create patient EHR sequences.')
 parser.add_argument('mimic3_pat_path', type=str, help='Root directory containing processed MIMIC-III patient files.')
@@ -12,12 +13,14 @@ cohort_type = args.cohort_type
 mimic3_pat_path = os.path.join(args.mimic3_pat_path, cohort_type)
 
 if cohort_type == 'train':
-    cohort_path = 'data/cohort-ehrseq.csv'
+    cohort_path = os.path.join('data', ut.dt_files['ehr-file'])
+    tracking_file = os.path.join('data', 'cohort_subject_done.txt')
 else:
-    cohort_path = 'data/cohort_test-ehrseq.csv'
+    cohort_path = os.path.join('data', ut.dt_files['ehr-file-test'])
+    tracking_file = os.path.join('data', 'test_cohort_subject-done.txt')
 
 # make vocab a df
-vocab_path = 'data/cohort-vocab.csv'
+vocab_path = os.path.join('data', ut.dt_files['vocab'])
 vocab = pd.read_csv(vocab_path)
 
 # create diagnosis sequence file
@@ -29,7 +32,6 @@ if os.stat(cohort_path).st_size == 0:
 
 # keep track of subjects already written
 # so we can pick up where we left off if necessary
-tracking_file = 'data/cohort-subject-done.txt'
 if not os.path.isfile(tracking_file):
     f = open(tracking_file, 'w')
     f.close()

@@ -5,12 +5,13 @@ import torch
 import numpy as np
 
 
-def evaluate(model, loss_fn, data_iter_ts, metrics, best_eval=False):
+def evaluate(model, loss_fn, data_iter_ts, metrics, test_set, best_eval=False):
     model.eval()
     summ = []
     encoded_list = []
     encoded_list_avg = []
     mrn_list = []
+    ts_decoded = []
 
     with torch.no_grad():
         for idx, (list_mrn, list_batch) in enumerate(data_iter_ts):
@@ -20,6 +21,10 @@ def evaluate(model, loss_fn, data_iter_ts, metrics, best_eval=False):
                 loss = loss_fn(out, batch)
                 out.cpu()
                 encoded.cpu()
+
+                if test_set:
+                    ts_decoded.append(out.tolist())
+
                 summary_batch = {metric: metrics[metric](out, batch).item() for metric in metrics}
                 summary_batch['loss'] = loss.item()
                 summ.append(summary_batch)
@@ -34,4 +39,4 @@ def evaluate(model, loss_fn, data_iter_ts, metrics, best_eval=False):
                                      for k, v in sorted(metrics_mean.items()))
         print(metrics_string)
 
-        return mrn_list, encoded_list, encoded_list_avg, metrics_mean
+        return mrn_list, encoded_list, encoded_list_avg, metrics_mean, ts_decoded
