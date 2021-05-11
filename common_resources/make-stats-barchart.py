@@ -28,4 +28,4 @@ ax.legend()
 
 fig.tight_layout()
 
-plt.savefig('pat_visits_barchart.png', dpi=700)
+plt.savefig('patients_by_study_and_split.png', dpi=700)

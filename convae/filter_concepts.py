@@ -73,14 +73,14 @@ def get_item_proportion_per_seq(train_file, test_file, item_id):
 
 # returns the frequency of each vocab item ("word") in patient sequences
 # in proportion to the total number of all patient sequences ("document")
-def get_doc_freq(train_seq, test_seq, dict_file):
-    if os.path.isfile(dict_file):
-        return pickle.load(open(dict_file, 'rb'))
+def get_doc_freq(vocab_file, train_seq, test_seq, dict_file):
+    #if os.path.isfile(dict_file):
+    #    return pickle.load(open(dict_file, 'rb'))
 
     doc_length = get_doc_length(train_seq, test_seq)
 
     doc_freq = defaultdict(float)
-    with open('data/cohort_vocab.csv', 'r') as vocab:
+    with open(vocab_file, 'r') as vocab:
         vocab_reader = DictReader(vocab)
         for row in vocab_reader:
             item = str(row['INDEX'])
@@ -97,12 +97,12 @@ def get_doc_freq(train_seq, test_seq, dict_file):
 # returns the sum of the ratios of item frequency in a patient sequence
 # to the length of that patient sequence
 # for each item over the whole set of patient sequences
-def get_term_freq(train_seq, test_seq, dict_file):
-    if os.path.isfile(dict_file):
-        return pickle.load(open(dict_file, 'rb'))
+def get_term_freq(vocab_file, train_seq, test_seq, dict_file):
+    #if os.path.isfile(dict_file):
+    #    return pickle.load(open(dict_file, 'rb'))
 
     term_freq = defaultdict(float)
-    with open('data/cohort_vocab.csv', 'r') as vocab:
+    with open(vocab_file, 'r') as vocab:
         vocab_reader = DictReader(vocab)
         for row in vocab_reader:
             item = str(row['INDEX'])
@@ -116,8 +116,8 @@ def get_term_freq(train_seq, test_seq, dict_file):
 
 
 def make_filter_scores_dict(df_dict, tf_dict, dict_file):
-    if os.path.isfile(dict_file):
-        return pickle.load(open(dict_file, 'rb'))
+    #if os.path.isfile(dict_file):
+    #    return pickle.load(open(dict_file, 'rb'))
 
     filter_scores = {key: tf_dict[key] * df_dict.get(key, 0) for key in tf_dict.keys()}
 
@@ -127,11 +127,12 @@ def make_filter_scores_dict(df_dict, tf_dict, dict_file):
     return filter_scores
 
 
+vocab_filename = 'data/cohort_vocab_icd.csv'
 train_seq = open(os.path.join('data', ut.dt_files['ehr-file']), 'r')
 test_seq = open(os.path.join('data', ut.dt_files['ehr-file-test']), 'r')
 
-doc_freq_dict = get_doc_freq(train_seq, test_seq, 'resources/doc_freq_dict.pkl')
-term_freq_dict = get_term_freq(train_seq, test_seq, 'resources/term_freq_dict.pkl')
+doc_freq_dict = get_doc_freq(vocab_filename, train_seq, test_seq, 'resources/doc_freq_dict.pkl')
+term_freq_dict = get_term_freq(vocab_filename, train_seq, test_seq, 'resources/term_freq_dict.pkl')
 filter_scores_dict = make_filter_scores_dict(doc_freq_dict, term_freq_dict, 'resources/filter_scores_dict.pkl')
 
 train_seq.close()

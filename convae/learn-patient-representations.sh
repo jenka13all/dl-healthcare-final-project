@@ -17,8 +17,8 @@ fi
 CUDA_VISIBLE_DEVICES=$gpu python3 -u ./patient_representations.py $indir $test_set
 
 # train
-# sh learn_patient_representations.sh ./data
+# sh learn-patient-representations.sh ./data
 
 # test
-# sh sh learn_patient_representations.sh ./data test
+# sh learn-patient-representations.sh ./data test
 

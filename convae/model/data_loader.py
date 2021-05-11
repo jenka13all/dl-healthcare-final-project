@@ -2,7 +2,7 @@
 Define the data to feed the deep learning model.
 
 If batch_size = 1, each sequence is padded to reach length multiple of
-"padded_seq_len"; each sequence is tehn trimmed in subsequences of
+"padded_seq_len"; each sequence is then trimmed in subsequences of
 length "padded_seq_len".
 """
 

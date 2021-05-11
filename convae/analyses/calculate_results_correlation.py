@@ -15,11 +15,8 @@ def get_pearson_cc(file_path, study_name):
     return x, y
 
 
-bench_results = '../../benchmarks/data/phenotyping/evaluation/orig_results_table.csv'
-bx, by = get_pearson_cc(bench_results, 'Benchmark')
-
-med2vec_results = '../resources/orig_results_table.csv'
-mx, my = get_pearson_cc(med2vec_results, 'Med2Vec')
+convae_results = '../pat_data/results_table.csv'
+mx, my = get_pearson_cc(convae_results, 'ConvAE')
 
 plt.style.use('ggplot')
 

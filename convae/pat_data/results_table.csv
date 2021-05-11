@@ -1,0 +1,26 @@
+,Phenotype,Type,Train,Test,AUC-ROC
+1,Acute and unspecified renal failure,acute,0.264,0.268,0.751
+2,Acute cerebrovascular disease,acute,0.093,0.103,0.677
+3,Acute myocardial infarction,acute,0.136,0.130,0.726
+4,Cardiac dysrhythmias,chronic,0.470,0.465,0.625
+5,Chronic kidney disease,chronic,0.180,0.185,0.511
+6,Chronic obstructive pulmonary disease and bronchiectasis,chronic,0.158,0.165,0.501
+7,Complications of surgical procedures or medical care,acute,0.352,0.339,0.554
+8,Conduction disorders,chronic,0.095,0.096,0.500
+9,Congestive heart failure; nonhypertensive,acute,0.500,0.506,0.802
+10,Coronary atherosclerosis and other heart disease,chronic,0.684,0.664,0.800
+11,Diabetes mellitus with complications,chronic,0.181,0.172,0.500
+12,Diabetes mellitus without complication,chronic,0.239,0.242,0.556
+13,Disorders of lipid metabolism,chronic,0.364,0.367,0.700
+14,Essential hypertension,chronic,0.528,0.524,0.660
+15,Fluid and electrolyte disorders,acute,0.435,0.444,0.602
+16,Gastrointestinal hemorrhage,acute,0.104,0.095,0.506
+17,Hypertension with complications and secondary hypertension,chronic,0.163,0.167,0.515
+18,Other liver diseases,acute,0.164,0.164,0.536
+19,Other lower respiratory disease,acute,0.075,0.067,0.500
+20,Other upper respiratory disease,acute,0.062,0.056,0.500
+21,Pleurisy; pneumothorax; pulmonary collapse,acute,0.127,0.123,0.500
+22,Pneumonia (except that caused by tuberculosis or sexually transmitted disease),acute,0.178,0.183,0.505
+23,Respiratory failure; insufficiency; arrest (adult),acute,0.230,0.235,0.727
+24,Septicemia (except in labor),acute,0.288,0.300,0.750
+25,Shock,acute,0.106,0.101,0.588

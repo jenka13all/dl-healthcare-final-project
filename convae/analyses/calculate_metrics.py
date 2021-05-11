@@ -1,8 +1,11 @@
+import os.path
+
 import numpy as np
 from sklearn import metrics
 import pickle
 import sklearn.utils as sk_utils
 import json
+import csv
 
 
 # function from Benchmark study
@@ -61,12 +64,9 @@ def print_metrics_multilabel(y_true, predictions, verbose=1):
     predictions = np.array(predictions)
 
     auc_scores = metrics.roc_auc_score(y_true, predictions, average=None)
-    ave_auc_micro = metrics.roc_auc_score(y_true, predictions,
-                                          average="micro")
-    ave_auc_macro = metrics.roc_auc_score(y_true, predictions,
-                                          average="macro")
-    ave_auc_weighted = metrics.roc_auc_score(y_true, predictions,
-                                             average="weighted")
+    ave_auc_micro = metrics.roc_auc_score(y_true, predictions, average="micro")
+    ave_auc_macro = metrics.roc_auc_score(y_true, predictions, average="macro")
+    ave_auc_weighted = metrics.roc_auc_score(y_true, predictions, average="weighted")
 
     if verbose:
         print("ROC AUC scores for labels:", auc_scores)
@@ -74,10 +74,78 @@ def print_metrics_multilabel(y_true, predictions, verbose=1):
         print("ave_auc_macro = {}".format(ave_auc_macro))
         print("ave_auc_weighted = {}".format(ave_auc_weighted))
 
-    return {"auc_scores": auc_scores,
-            "ave_auc_micro": ave_auc_micro,
-            "ave_auc_macro": ave_auc_macro,
-            "ave_auc_weighted": ave_auc_weighted}
+    return {
+        "auc_scores": auc_scores,
+        "ave_auc_micro": ave_auc_micro,
+        "ave_auc_macro": ave_auc_macro,
+        "ave_auc_weighted": ave_auc_weighted
+    }
+
+
+def get_blank_care_matrix(file):
+    with open(file, 'r') as f:
+        reader = csv.reader(f)
+        cohort_size = len(list(reader))
+
+    return np.zeros([cohort_size, 25], dtype=float)
+
+
+def get_care_matrix(care_matrix_filename,
+                      pat_data_file,
+                      phen_codes_dict,
+                      indices_filename):
+    if os.path.isfile(care_matrix_filename):
+        care_matrix = pickle.load(open(care_matrix_filename, 'rb'))
+        indices_to_skip_list = pickle.load(open(indices_filename, 'rb'))
+
+        return care_matrix, indices_to_skip_list
+
+    indices_to_skip = []
+    care_matrix = get_blank_care_matrix(pat_data_file)
+
+    with open(pat_data_file) as f:
+        rd = csv.reader(f)
+        idx = 0
+        for r in rd:
+            # populate care_matrix
+            seqs = r[1:]
+            for seq in seqs:
+                seq = int(seq)
+                if seq in phen_codes_dict:
+                    task_nr = int(phen_codes_dict[seq])
+                    task_index = task_nr - 1
+                    care_matrix[idx][task_index] = 1.
+
+            # populate indices to skip
+            if sum(care_matrix[idx]) == 0:
+                # there's only one class present
+                # which means there are no true positives/false positives
+                #  and it's not usable for ROC-AUC
+                # save this index to skip for later
+                indices_to_skip.append(idx)
+
+            idx += 1
+
+    with open(care_matrix_filename, 'wb') as f1:
+        pickle.dump(care_matrix, f1)
+
+    with open(indices_filename, 'wb') as f1:
+        pickle.dump(indices_to_skip, f1)
+
+    return care_matrix, indices_to_skip
+
+
+# return clean y_true and y_preds:
+# entries with only one class in y_true are skipped (in both matrices), since they can't be used in AUC-ROC
+def clean_care_matrices(care_true_matrix,
+                        care_preds_matrix,
+                        skip_indices_no_tp,
+                        skip_indices_no_fp):
+    skip_indices = list(set(skip_indices_no_tp + skip_indices_no_fp))
+    new_care_true = np.delete(care_true_matrix, skip_indices, axis=0)
+    new_care_preds = np.delete(care_preds_matrix, skip_indices, axis=0)
+
+    return new_care_true, new_care_preds
 
 
 # concat each row of y_true with y_preds to we can reliably shuffle it later
@@ -88,14 +156,50 @@ def create_data(y_true, y_preds):
     return data, nr_labels
 
 
-model_path = '../Med2Vec_model/train_test_split_3_digit_icd/'
+phen_codes = pickle.load(open('../resources/vocab_index_to_phen_task_nr.dict', 'rb'))
 
-# get care_true and care_preds matrices created during visit prediction of Med2VecRunner.py
-care_true = pickle.load(open(model_path + 'care_true.pkl', 'rb'))
-care_preds = pickle.load(open(model_path + 'care_preds.pkl', 'rb'))
+care_true, indices_to_skip_no_tp = get_care_matrix(
+    '../pat_data/care_true.pkl',
+    # this file will be created when you run evaluate_from_checkpoint.py on the test data
+    # it was too big to include in the repo
+    '../data/encodings/test/target.csv',
+    phen_codes,
+    '../pat_data/indices_to_skip_no_tp.pkl'
+)
+
+care_preds, indices_to_skip_no_fp = get_care_matrix(
+    '../pat_data/care_preds.pkl',
+    # this file will be created when you run evaluate_from_checkpoint.py on the test data
+    # it was too big to include in the repo
+    '../data/encodings/test/predictions.csv',
+    phen_codes,
+    '../pat_data/indices_to_skip_no_fp.pkl'
+)
+
+print('nr indices to skip in target', len(indices_to_skip_no_tp))
+print('nr indices to skip in pred', len(indices_to_skip_no_fp))
+
+print('orig care_true shape', care_true.shape)
+print('orig care_preds shape', care_preds.shape)
+
+care_true, care_preds = clean_care_matrices(
+    care_true,
+    care_preds,
+    indices_to_skip_no_tp,
+    indices_to_skip_no_fp
+)
+
+print('new care_true shape', care_true.shape)
+print('new care_preds shape', care_preds.shape)
+
+
 data, nr_labels = create_data(care_true, care_preds)
 
-ret = print_metrics_multilabel(y_true=data[:, nr_labels:], predictions=data[:, :nr_labels], verbose=0)
+ret = print_metrics_multilabel(
+    y_true=data[:, nr_labels:],
+    predictions=data[:, :nr_labels],
+    verbose=0,
+)
 
 # code from Benchmark study
 # https://github.com/YerevaNN/mimic3-benchmarks/blob/master/mimic3benchmark/evaluation/evaluate_pheno.py
@@ -144,7 +248,7 @@ for m in reported_metrics:
     results[m]['97.5% percentile'] = np.percentile(runs, 97.5)
     del results[m]['runs']
 
-save_file = model_path + 'pheno.json'
+save_file = '../pat_data/pheno.json'
 print("Saving the results (including task specific metrics) in {} ...".format(save_file))
 with open(save_file, 'w') as f:
     json.dump(results, f)
@@ -153,4 +257,5 @@ print("Printing the summary of results (task specific metrics are skipped) ...")
 for i in range(1, n_tasks + 1):
     m = 'ROC AUC of task {}'.format(i)
     del results[m]
+    
 print(results)

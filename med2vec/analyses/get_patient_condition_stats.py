@@ -42,10 +42,8 @@ def get_care_condition_for_med2vec_id(code):
 
 # patient medical codes: training and test
 data_path = '../Med2Vec_data/'
-pat_seqs = np.array(pickle.load(open(data_path + 'seqs.pkl', 'rb')), dtype=object)
 train_pat_seqs = np.array(pickle.load(open(data_path + 'train_seqs.pkl', 'rb')), dtype=object)
 test_pat_seqs = np.array(pickle.load(open(data_path + 'test_seqs.pkl', 'rb')), dtype=object)
-two_pat_seqs = np.array(pickle.load(open(data_path + 'test_2pat_data/seqs.pkl', 'rb')), dtype=object)
 
 local_resources_path = '../resources/'
 common_resource_path = '../../common_resources/'
@@ -120,9 +118,6 @@ def get_care_condition_prevalence_last_visit(pat_seqs):
 
     return prevalence_dict
 
-
-#two_pat_seqs = np.append(two_pat_seqs, np.array([-1]))
-#two_pat_cond_dict = get_care_condition_prevalence_last_visit(two_pat_seqs)
 
 # have to add a [-1] as last element of the whole sequence, so we get the last sequence too
 train_pat_seqs = np.append(train_pat_seqs, np.array([-1]))

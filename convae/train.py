@@ -21,6 +21,7 @@ def train(model, optimizer, loss_fn, data_iter_tr):
     mrn_list = []
     for idx, (list_mrn, list_batch) in enumerate(data_iter_tr):
         loss_batch = []
+        print('\nRunning train() on batch', str(idx))
         for batch, mrn in zip(list_batch, list_mrn):
             batch = batch.cuda()
             optimizer.zero_grad()
@@ -36,13 +37,14 @@ def train(model, optimizer, loss_fn, data_iter_tr):
 
         loss_list.append(np.mean(loss_batch))
 
+    print('\nCalculating loss mean')
     loss_mean = np.mean(loss_list)
 
     return mrn_list, encoded_list, encoded_avg_list, loss_mean
 
 
 def train_and_evaluate(model, data_iter_tr, data_iter_ts,
-                       loss_fn, optimizer, metrics, exp_dir, test_set):
+                       loss_fn, optimizer, metrics, exp_dir):
     loss_vect = []
     n_epoch = ut.model_param['num_epochs']
     for epoch in range(1, n_epoch + 1):
@@ -58,6 +60,8 @@ def train_and_evaluate(model, data_iter_tr, data_iter_ts,
         is_best_1 = loss_mean < 0.1
         is_best_2 = epoch == n_epoch
         if is_best_1 or is_best_2:
+            # uncomment this out to train and evaluate
+            '''
             outfile = os.path.join(exp_dir, 'TRconvae-avg_vect.csv')
             with open(outfile, 'w') as f:
                 wr = csv.writer(f)
@@ -82,17 +86,23 @@ def train_and_evaluate(model, data_iter_tr, data_iter_ts,
                 for idx, l in enumerate(loss_vect):
                     wr.writerow([idx, l])
 
+            '''
             print('\nFound new best model at epoch {0}'.format(epoch))
             ut.save_best_model(epoch, model, optimizer, loss_mean, exp_dir)
 
+            # uncomment this out to train and evaluate
+            '''
             print('\nEvaluating the model')
-            mrn, encoded, encoded_avg, test_metrics, ts_decoded = evaluate(
+            mrn, encoded, encoded_avg, test_metrics = evaluate(
                 model,
                 loss_fn,
                 data_iter_ts,
                 metrics,
-                test_set,
                 best_eval=True
             )
-
-            return mrn, encoded, encoded_avg, test_metrics, ts_decoded
+            '''
+            # comment this out if training and evaluating
+            # only train
+            return
+            # uncomment this out to train and evaluate
+            #return mrn, encoded, encoded_avg, test_metrics

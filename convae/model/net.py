@@ -112,6 +112,13 @@ def accuracy(out, target):
     return torch.sum((pred == target).float()) / (out.shape[2] * out.shape[0])
 
 
+def pred(out, target):
+    logsoft = F.log_softmax(out, dim=1)
+    pred = torch.argmax(logsoft, dim=1)
+
+    return pred
+
+
 criterion = nn.CrossEntropyLoss()
 
 metrics = {'accuracy': accuracy}

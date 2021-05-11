@@ -25,11 +25,12 @@ representations of patients can be used for such a task.
 
 The repository is split into one directory per study, each of which contains my own code (some of which is code that
 I corrected from publicly available repositories for the studies) and notes on how to reproduce the results. 
+The common_resources directory contains mappings used by all the models.
 
-This is currently a work in progress, and part of my final project for "Deep Learning for Healthcare" for the 
+This repo is part of my final project for "Deep Learning for Healthcare" for the 
 Spring 2021 semester of my Masters degree in Data Science at the University of Illinois Urbana-Champagne. The
-write-up and video presentation, along with any illustrative figures and tables, will follow as I continue to 
-get results.
+write-up and video presentation, along with any illustrative figures and tables, will follow 
+once I am permitted to publish the results after grading.
 
 ## References
 

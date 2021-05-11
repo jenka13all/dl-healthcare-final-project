@@ -4,7 +4,6 @@ from collections import defaultdict
 import matplotlib.pyplot as plt
 
 
-pat_seqs = np.array(pickle.load(open('../Med2Vec_data/seqs.pkl', 'rb')), dtype=object)
 pat_labels = np.array(pickle.load(open('../Med2Vec_data/labels.pkl', 'rb')), dtype=object)
 
 # get total codes over patients distribution:

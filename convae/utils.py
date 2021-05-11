@@ -4,9 +4,9 @@ import os
 # dataset filenames
 # in data_example
 dt_files = {
-    'ehr-file': 'cohort_ehrseq.csv',
-    'ehr-file-test': 'cohort_test_ehrseq.csv',
-    'vocab': 'cohort_vocab.csv'
+    'ehr-file': 'cohort_ehrseq_icd.csv',
+    'ehr-file-test': 'cohort_test_ehrseq_icd.csv',
+    'vocab': 'cohort_vocab_icd.csv'
 }
 
 # model parameters

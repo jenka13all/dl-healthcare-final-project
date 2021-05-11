@@ -28,29 +28,18 @@ def convert_json_results_to_dict(results_json, phenotype_labels):
     return final_results_dict
 
 
-def create_empty_final_results_dict(phenotype_labels):
-    # get the NAME of "Task x" (the care condition) along with its results
-    final_results_dict = {}
-    for i in range(1, 26):
-        key = phenotype_labels[i]
-        final_results_dict[key] = 0
-
-    return final_results_dict
-
-
-def get_results_table(filename, final_results_dict, train, test, definitions):
+def get_results_table(filename, final_results_dict, train_dict, test_dict, definitions):
     if os.path.isfile(filename):
         return pd.read_csv(filename)
 
     # build final dataframe of care condition, type, prevalence over all visits in split, AUC-ROC
     metrics_df = pd.DataFrame(columns=['Phenotype', 'Type', 'Train', 'Test', 'AUC-ROC'])
-    i = 0
+    i = 1
     for rx, metrics in final_results_dict.items():
-        prev_train = round((train[rx].sum() / train.shape[0]), 3)
-        prev_test = round((test[rx].sum() / test.shape[0]), 3)
+        prev_train = train_dict[i]
+        prev_test = test_dict[i]
 
-        #auc_roc = round(metrics['value'], 3)
-        auc_roc = 0
+        auc_roc = round(metrics['value'], 3)
         rx_type = definitions[rx]['type']
 
         metrics_df.loc[i] = [rx, rx_type, prev_train, prev_test, auc_roc]
@@ -62,25 +51,24 @@ def get_results_table(filename, final_results_dict, train, test, definitions):
     return metrics_df
 
 
-data_path = '../pat_data/'
+local_resources_path = '../resources/'
 common_resources_path = '../../common_resources/'
 
 with open(common_resources_path + 'hcup_ccs_2015_definitions_benchmark.yaml', 'r') as f:
     definitions = yaml.load(f, Loader=yaml.FullLoader)
 
-phenotype_labels = common_resources_path + 'task_nr_to_phenotype_label.dict'
+phenotype_labels = pickle.load(open(common_resources_path + 'task_nr_to_phenotype_label.dict', 'rb'))
 
 # open pheno_results.json
-#results_json = data_path + 'evaluation/pheno_results.json'
-#final_results_dict = convert_json_results_to_dict(results_json, phenotype_labels)
-
-final_results_dict = create_empty_final_results_dict(phenotype_labels)
+results_json = '../pat_data/pheno.json'
+final_results_dict = convert_json_results_to_dict(results_json, phenotype_labels)
 
 # get prevalence of each care-condition in train and test population
-test = pd.read_csv(data_path + 'test-listfile.csv')
-train = pd.read_csv(data_path + 'train-listfile.csv')
+test = pickle.load(open(local_resources_path + 'train_prevalence.dict', 'rb'))
+train = pickle.load(open(local_resources_path + 'test_prevalence.dict', 'rb'))
+
 results = get_results_table(
-    data_path + 'evaluation/results_table.csv',
+    '../pat_data/results_table.csv',
     final_results_dict,
     train,
     test,

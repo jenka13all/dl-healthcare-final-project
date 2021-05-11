@@ -80,7 +80,7 @@ train_prevalence_dict = pickle.load(open(local_resource_path + 'care_condition_t
 test_prevalence_dict = pickle.load(open(local_resource_path + 'care_condition_test_prevalence.dict', 'rb'))
 
 results = get_results_table(
-    '../Med2Vec_data/evaluate/results_table.csv',
+    '../Med2Vec_data/results_table.csv',
     final_results_dict,
     train_prevalence_dict,
     test_prevalence_dict,

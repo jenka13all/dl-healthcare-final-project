@@ -7,6 +7,7 @@ import model.net as net
 import torch.nn as nn
 import torch
 import utils as ut
+import vocabulary
 import argparse
 import sys
 import csv
@@ -51,28 +52,12 @@ def learn_patient_representations(
     # encodings folder to save the representations
     exp_dir = os.path.join(indir, 'encodings')
     if test_set:
-        exp_dir = os.path.join(indir, 'test', 'encodings')
+        exp_dir = os.path.join(indir, 'encodings', 'test')
 
     os.makedirs(exp_dir, exist_ok=True)
 
     # get the vocabulary size
-    fvocab = os.path.join(
-        os.path.join(indir),
-        ut.dt_files['vocab']
-    )
-
-    with open(fvocab) as f:
-        rd = csv.reader(f)
-        next(rd)
-        vocab = {}
-        for r in rd:
-            # this won't work for mimic3 data
-            # label, index
-            # vocab[int(r[1])] = r[0]
-            # index, code
-            vocab[int(r[0])] = r[2]
-        vocab_size = len(vocab) + 1
-    print('Vocabulary size: {0}'.format(vocab_size))
+    vocab_size, vocab = vocabulary.get_vocab(indir)
 
     # load pre-computed embeddings
     if emb_filename is not None:
@@ -143,18 +128,30 @@ def learn_patient_representations(
     loss_fn = net.criterion
     print('Training for {} epochs\n'.format(ut.model_param['num_epochs']))
 
-    # training and evaluation
-    # results of best model are saved to outdir/best_model.pt in this function
-    # ts_decoded will be an empty list if test_set=False
-    mrn, encoded, encoded_avg, metrics_avg, ts_decoded = train_and_evaluate(
+    #only train
+    train_and_evaluate(
         model,
         data_generator_tr,
         data_generator_ts,
         loss_fn,
         optimizer,
         net.metrics,
-        exp_dir,
-        test_set
+        exp_dir
+    )
+
+    # uncomment this out to train AND evaluate
+    # will take a really, really long time
+    # training and evaluation
+    # results of best model are saved to outdir/best_model.pt in this function
+    '''
+    mrn, encoded, encoded_avg, metrics_avg = train_and_evaluate(
+        model,
+        data_generator_tr,
+        data_generator_ts,
+        loss_fn,
+        optimizer,
+        net.metrics,
+        exp_dir
     )
 
     # save encodings
@@ -174,16 +171,6 @@ def learn_patient_representations(
             for e in evs:
                 wr.writerow([m] + e)
 
-    # save decoded reconstructions for downstream task
-    if test_set and len(ts_decoded) > 0:
-        outfile = os.path.join(exp_dir, 'convae_ts_reconstruction.csv')
-        with open(outfile, 'w') as f:
-            wr = csv.writer(f)
-            wr.writerow(["MRN", "RECONSTRUCTED"])
-            for m, decoded in zip(mrn, ts_decoded):
-                for d in decoded:
-                    wr.writerow([m] + d)
-
     # metrics (loss and accuracy)
     outfile = os.path.join(exp_dir, 'metrics.txt')
     with open(outfile, 'w') as f:
@@ -199,7 +186,7 @@ def learn_patient_representations(
     if test_set:
         outfile = os.path.join(exp_dir, 'test_cohort_ehr_subseq{0}.csv'.format(ut.len_padded))
         write_ehr_subseq(data_generator_ts, outfile)
-
+    '''
     return
 
 
