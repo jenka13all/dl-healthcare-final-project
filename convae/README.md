@@ -52,49 +52,49 @@ To prepare the data:
    and test populations, and the AUC-ROC score of the model on predicting the presence or absence of each
    care condition in the test set, using the model trained on the training set.
    
-   sh learn-patient-representations.sh ./data
-   -> creates data/encodings/best_model.pt
+       sh learn-patient-representations.sh ./data
+       -> creates data/encodings/best_model.pt
    
-   python evaluate_from_checkpoint.py
-   -> creates data/encodings/test/test_metrics.txt
-   -> creates data/encodings/test/target.csv
-   -> creates data/encodings/test/predictions.csv
+       python evaluate_from_checkpoint.py
+       -> creates data/encodings/test/test_metrics.txt
+       -> creates data/encodings/test/target.csv
+       -> creates data/encodings/test/predictions.csv
    
-   cd analyses
+       cd analyses
    
-   python make_phen_codes_dict.py
-   + requires data/cohort_vocab_icd.csv
-   -> creates resources/vocab_index_to_phen_task_nr.dict
+       python make_phen_codes_dict.py
+       + requires data/cohort_vocab_icd.csv
+       -> creates resources/vocab_index_to_phen_task_nr.dict
      
-   python get_prevalence.py
-   + requires resources/vocab_index_to_phen_task_nr.dict
-   + requires data/cohort_ehrseq_icd.csv
-   + requires data/cohort_test_ehrseq_icd.csv
+       python get_prevalence.py
+       + requires resources/vocab_index_to_phen_task_nr.dict
+       + requires data/cohort_ehrseq_icd.csv
+       + requires data/cohort_test_ehrseq_icd.csv
    
-   -> creates resources/train_prevalence.dict
-   -> creates resources/test_prevalence.dict
+       -> creates resources/train_prevalence.dict
+       -> creates resources/test_prevalence.dict
      
-   python calculate_metrics.py
-   + requires resources/vocab_index_to_phen_task_nr.dict
-   + requires data/encodings/test/target.csv
-   + requires data/encodings/test/predictions.csv
+       python calculate_metrics.py
+       + requires resources/vocab_index_to_phen_task_nr.dict
+       + requires data/encodings/test/target.csv
+       + requires data/encodings/test/predictions.csv
    
-   -> creates pat_data/care_true.pkl
-   -> creates pat_data/care_preds.pkl
-   -> creates pat_data/indices_to_skip_no_fp.pkl
-   -> creates pat_data/indices_to_skip_no_tp.pkl
-   -> creates pat_data/pheno.json
+       -> creates pat_data/care_true.pkl
+       -> creates pat_data/care_preds.pkl
+       -> creates pat_data/indices_to_skip_no_fp.pkl
+       -> creates pat_data/indices_to_skip_no_tp.pkl
+       -> creates pat_data/pheno.json
    
-   python make_stats_table.py
-   + requires pat_data/pheno.json
-   + requires resources/train_prevalence.dict
-   + requires resources/test_prevalence.dict
+       python make_stats_table.py
+       + requires pat_data/pheno.json
+       + requires resources/train_prevalence.dict
+       + requires resources/test_prevalence.dict
    
-   -> creates pat_data/results_table.csv
+       -> creates pat_data/results_table.csv
 
-   python calculate_results_correlation.py
-   + requires pat_data/results_table.csv
-   -> creates figures/prevalence_pearson.png
+       python calculate_results_correlation.py
+       + requires pat_data/results_table.csv
+       -> creates figures/prevalence_pearson.png
 
 ## References
 

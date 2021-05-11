@@ -7,29 +7,29 @@ available in the study's [public Github repository](https://github.com/YerevaNN/
 
 To reproduce the evaluation on the results, execute the following commands in order:
    
-   cd analyses
+    cd analyses
 
-   python map_task_nr_to_codes.py
-   -> creates common_resources/task_nr_to_phenotype_label.dict used by other models in this repo
-   -> creates common_resources/task_nr_to_phenotype_codes.dict used by other models in this repo
+    python map_task_nr_to_codes.py
+    -> creates common_resources/task_nr_to_phenotype_label.dict used by other models in this repo
+    -> creates common_resources/task_nr_to_phenotype_codes.dict used by other models in this repo
    
-   python get_visit_stats.py:
-   + requires data/phenotyping/train_listfile.csv and /data/phenotyping/test_listfile.csv 
-     and /data/phenotyping/evaluation/pheno_results.json files
-     created by following the Benchmark instructions for the phenotyping task
-   -> creates data/phenotyping/evaluation/results_table.csv
+    python get_visit_stats.py:
+    + requires data/phenotyping/train_listfile.csv, /data/phenotyping/test_listfile.csv 
+      and /data/phenotyping/evaluation/pheno_results.json files
+      created by following the Benchmark instructions for the phenotyping task
+    -> creates data/phenotyping/evaluation/results_table.csv
      
-   python make_stats_table.py
-   + requires common_resources/task_nr_to_phenotype_label.dict
-   + requires data/phenotyping/train_listfile.csv and /data/phenotyping/test_listfile.csv 
-     and /data/phenotyping/evaluation/pheno_results.json files
-     created by following the Benchmark instructions for the phenotyping task
-   -> creates data/phenotyping/evaluation/results_table.csv
+    python make_stats_table.py
+    + requires common_resources/task_nr_to_phenotype_label.dict
+    + requires data/phenotyping/train_listfile.csv, /data/phenotyping/test_listfile.csv 
+      and /data/phenotyping/evaluation/pheno_results.json files
+      created by following the Benchmark instructions for the phenotyping task
+    -> creates data/phenotyping/evaluation/results_table.csv
      
-   python get_visit_stats.py
-   + requires data/phenotyping/train_listfile.csv and /data/phenotyping/test_listfile.csv 
-     created by following the Benchmark instructions for the phenotyping task
-   -> creates figures/visit_distribution.png
+     python get_visit_stats.py
+     + requires data/phenotyping/train_listfile.csv and /data/phenotyping/test_listfile.csv 
+       created by following the Benchmark instructions for the phenotyping task
+    -> creates figures/visit_distribution.png
      
 
 ## References

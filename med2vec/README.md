@@ -28,17 +28,17 @@ parameter of "predict_next_visit()" to True or False, accordingly.
 
 To train a model on 3-digit ICD9 codes, you first need to create the mapping dictionaries:
 
-   cd analyses
+    cd analyses
 
-   python map_diagnoses.py {path to MIMIC-III database files}
-   -> creates resources/seqs_to_icd.dict
-   -> creates resources/labels_to_icd.dict
+    python map_diagnoses.py {path to MIMIC-III database files}
+    -> creates resources/seqs_to_icd.dict
+    -> creates resources/labels_to_icd.dict
 
 Now call the following command with your model path of choice. 
 
-   cd ~/
+    cd ~/
 
-   python Med2VecRunner.py --seq_file=./Med2Vec_data/train_seqs.pkl \
+    python Med2VecRunner.py --seq_file=./Med2Vec_data/train_seqs.pkl \
       --label_file=./Med2Vec_data/label_seqs.pkl \
       --model_path=./Med2Vec_model/{your model path}
 
@@ -49,33 +49,33 @@ appropriately for n_input, n_output, and n_samples in the configuration dictiona
 To evaluate the results, set the model path in "analyses/calculate_metrics.py" (within the file) and execute
 the following commands in order:
 
-   cd analyses
+    cd analyses
 
-   python map_diagnoses.py {path to MIMIC-III database files}
-   -> creates resources/seqs_to_icd.dict
-   -> creates resources/labels_to_icd.dict
+    python map_diagnoses.py {path to MIMIC-III database files}
+    -> creates resources/seqs_to_icd.dict
+    -> creates resources/labels_to_icd.dict
 
-   python calculate_metrics.py
-   -> creates Med2Vec_model/{model path}/pheno.json
+    python calculate_metrics.py
+    -> creates Med2Vec_model/{model path}/pheno.json
 
-   python get_patient_condition_stats.py
-   -> creates resources/care_conditions_train_prevalence.dict
-   -> creates resources/care_conditions_test_prevalence.dict
+    python get_patient_condition_stats.py
+    -> creates resources/care_conditions_train_prevalence.dict
+    -> creates resources/care_conditions_test_prevalence.dict
 
-   python make_stats_table.py
-   + requires Med2Vec_mode/{model path}/pheno.json
-   + requires resources/care_conditions_train_prevalence.dict
-   + requires resources/care_conditions_test_prevalence.dict
+    python make_stats_table.py
+    + requires Med2Vec_mode/{model path}/pheno.json
+    + requires resources/care_conditions_train_prevalence.dict
+    + requires resources/care_conditions_test_prevalence.dict
 
-   -> creates Med2Vec_data/results_table.csv
+    -> creates Med2Vec_data/results_table.csv
 
-   python calculate_metrics_correlation.py
-   + requires Med2Vec_data/results_table.csv
-   -> creates figures/prevalence_pearson.png
+    python calculate_metrics_correlation.py
+    + requires Med2Vec_data/results_table.csv
+    -> creates figures/prevalence_pearson.png
      
-   python get_code_stats.py
-   -> creates figures/pat_codes_distribution.png
-   -> creates figures/visit_codes_distribtuion.png
+    python get_code_stats.py
+    -> creates figures/pat_codes_distribution.png
+    -> creates figures/visit_codes_distribtuion.png
 
 ## References
 
