@@ -28,9 +28,7 @@ I corrected from publicly available repositories for the studies) and notes on h
 The common_resources directory contains mappings used by all the models.
 
 This repo is part of my final project for "Deep Learning for Healthcare" for the 
-Spring 2021 semester of my Masters degree in Data Science at the University of Illinois Urbana-Champagne. The
-write-up and video presentation, along with any illustrative figures and tables, will follow 
-once I am permitted to publish the results after grading.
+Spring 2021 semester of my Masters degree in Data Science at the University of Illinois Urbana-Champagne.
 
 ## References
 
